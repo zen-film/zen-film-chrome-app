@@ -1,13 +1,18 @@
 "use strict";
 
 define(
-    [ "knockout", "models/AppModel" ],
-    function(ko, AppModel) {
+    [ "knockout", "jquery" ],
+    function(ko, $) {
         function GridViewModel(){
             var self = this;
-
-            self.app = AppModel.instance();
-            self.photos = ko.observableArray(Array(self.app.photos));
+            self.photos = ko.observableArray([]);
+            self.loadPhoto = function() {
+                $.getJSON("/photos").done(
+                    function(data) {
+                        self.photos = data;
+                    }
+                );
+            };
         }
         return GridViewModel;
     }

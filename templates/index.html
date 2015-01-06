@@ -1,22 +1,28 @@
-{% extends "base.html" %}
-{% block grid %}
-<!-- ko if: app.ready -->
-<ul class="photo-grid" data-bind="foreach: photos">
-    <li>
-        <span data-bind="text: SourceFile"> </span>
-        <!-- <img data-bind='attr: { "src": "/photo/" + SourceFile }' /> -->
-    </li>
-    <!-- {% for elem in image %}
-        <li>
-            <img class="photo" draggable="False" src="{{ url_for('photo_static', filename=elem['SourceFile']) }}" />
-        </li>
-    {% endfor %} -->
-</ul>
-<!-- /ko -->
-<div class="buttons-block">
-    <button class="btn btn-fab btn-info btn-raised btn-sm"><i class="mdi mdi-action mdi-check-all"></i></button>
-    <button class="btn btn-fab btn-info btn-raised btn-sm"><i class="mdi mdi-action mdi-auto-fix"></i></button>
-    <button class="btn btn-fab btn-info btn-raised btn-sm"><i class="mdi mdi-action mdi-pencil"></i></button>
-    <button class="btn btn-fab btn-info btn-raised btn-sm"><i class="mdi mdi-action mdi-cloud-upload"></i></button>
-</div>
-{% endblock %}
+<html>
+    <head>
+        <title>ZEN &middot; FILM</title>
+        <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.1/css/bootstrap.min.css">
+        <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-material-design/0.2.1/css/material.min.css">
+        <link rel="stylesheet" href="/vendor/mdi/materialdesignicons.css">
+        <link rel="stylesheet" href="/static/style.css">
+        <script src="//cdnjs.cloudflare.com/ajax/libs/require.js/2.1.15/require.min.js"></script>
+        <script src="//yastatic.net/jquery/2.1.3/jquery.min.js"></script>
+        <script src="/static/requireConfig.js"></script>
+        <script src="/static/scripts/main.js"></script>
+    </head>
+    <body>
+        <div class="buttons-block">
+            <button class="btn btn-fab btn-info btn-raised btn-sm"><i class="mdi mdi-action mdi-check-all"></i></button>
+            <button class="btn btn-fab btn-info btn-raised btn-sm"><i class="mdi mdi-action mdi-auto-fix"></i></button>
+            <button class="btn btn-fab btn-info btn-raised btn-sm"><i class="mdi mdi-action mdi-pencil"></i></button>
+            <button class="btn btn-fab btn-info btn-raised btn-sm"><i class="mdi mdi-action mdi-cloud-upload"></i></button>
+        </div>
+
+        <ul class="photo-grid" data-bind="foreach: photos">
+            <li>
+                <p data-bind='text: SourceFile'></p>
+                <!-- <img data-bind='attr: { "src": SourceFile }' /> -->
+            </li>
+        </ul>
+    </body>
+</html>
