@@ -42,26 +42,16 @@ def find_similar_photo():
 
     photos = glob.glob('*.JPG')
 
-    grouped_photo = {}
-    for i in range(len(photos)):
-        current_hash = dhash(Image.open(path + photos[i]))
+    grouped_photo = dict()
+    for photo in photos:
+        current_hash = dhash(Image.open(path + photo))
         if current_hash in grouped_photo:
-            grouped_photo[current_hash].append(photos[i])
+            grouped_photo[current_hash].append(photo)
         else:
-            grouped_photo.update({current_hash: [photos[i]]})
-
-    print(grouped_photo)
+            grouped_photo[current_hash] = [photo]
 
     os.chdir(workdir)
-    return "hello"
-
-
-def get_simmilar(hashdict, dhash):
-    out = []
-    for k, v in hashdict.keys:
-        if v == dhash:
-            out.append(k)
-    return out
+    return json.dumps(grouped_photo)
 
 
 def get_photos(path):
