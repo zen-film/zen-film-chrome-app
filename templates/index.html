@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block grid %}
+<!-- ko if: app.ready -->
+<ul class="photo-grid" data-bind="foreach: photos">
+    <li>
+        <span data-bind="text: SourceFile"> </span>
+        <!-- <img data-bind='attr: { "src": "/photo/" + SourceFile }' /> -->
+    </li>
+    <!-- {% for elem in image %}
+        <li>
+            <img class="photo" draggable="False" src="{{ url_for('photo_static', filename=elem['SourceFile']) }}" />
+        </li>
+    {% endfor %} -->
+</ul>
+<!-- /ko -->
+<div class="buttons-block">
+    <button class="btn btn-fab btn-info btn-raised btn-sm"><i class="mdi mdi-action mdi-check-all"></i></button>
+    <button class="btn btn-fab btn-info btn-raised btn-sm"><i class="mdi mdi-action mdi-auto-fix"></i></button>
+    <button class="btn btn-fab btn-info btn-raised btn-sm"><i class="mdi mdi-action mdi-pencil"></i></button>
+    <button class="btn btn-fab btn-info btn-raised btn-sm"><i class="mdi mdi-action mdi-cloud-upload"></i></button>
+</div>
+{% endblock %}
