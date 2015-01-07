@@ -11,18 +11,33 @@
         <script src="/static/scripts/main.js"></script>
     </head>
     <body>
-        <div class="buttons-block">
-            <button class="btn btn-fab btn-info btn-raised btn-sm"><i class="mdi mdi-action mdi-checkbox-marked-circle-outline"></i></button>
-            <button class="btn btn-fab btn-info btn-raised btn-sm"><i class="mdi mdi-action mdi-image-filter"></i></button>
-            <button class="btn btn-fab btn-info btn-raised btn-sm"><i class="mdi mdi-action mdi-cloud-upload"></i></button>
-            <button class="btn btn-fab btn-info btn-raised btn-sm"><i class="mdi mdi-action mdi-play"></i></button>
-            <button class="btn btn-fab btn-info btn-raised btn-sm"><i class="mdi mdi-action mdi-pencil"></i></button>
-        </div>
+        <div class="wrap">
+            <div class="buttons-block">
+                <!-- <button data-bind="click: $root.selectAllToggle()" class="btn btn-fab btn-info btn-raised btn-sm"><i class="mdi mdi-action mdi-checkbox-marked-circle-outline"></i></button> -->
+                <!-- <button onclick="document.location='/magick'" class="btn btn-fab btn-info btn-raised btn-sm"><i class="mdi mdi-action mdi-image-filter"></i></button> -->
+                <button class="btn btn-fab btn-info btn-raised btn-sm"><i class="mdi mdi-action mdi-cloud-upload"></i></button>
+                <button class="btn btn-fab btn-info btn-raised btn-sm"><i class="mdi mdi-action mdi-play"></i></button>
+                <button class="btn btn-fab btn-info btn-raised btn-sm"><i class="mdi mdi-action mdi-pencil"></i></button>
+            </div>
 
-        <ul class="photo-grid" data-bind="foreach: photos">
-            <li>
-                <img class="photo" data-bind='attr: { "src": "/photo/"+SourceFile }' />
-            </li>
-        </ul>
+            <ul class="photo-grid" data-bind="foreach: photos">
+                <li class="photo">
+                    <img class="photo__item"data-bind='attr: { "src": "/photo/"+SourceFile }, click: $parent.selectToggle' />
+                </li>
+            </ul>
+            <ul class="editor editor_unhide">
+                <li class="editor__section">
+                    <h1 class="editor__header">About</h1>
+                    <ul class="editor__inner">
+                        <li>
+                            <i class="mdi editor__icon mdi-cloud-upload"></i>
+                            <p class="editor__title">Текст</p>
+                            <input class="editor__input" type="text">
+                        </li>
+                    </ul>
+                </li>
+                <li class="editor__section"></li>
+            </ul>
+        </div>
     </body>
 </html>
