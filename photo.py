@@ -30,7 +30,7 @@ def index():
 
 @app.route('/photos')
 def json_photo():
-    photos = get_photos(sys.argv[1])
+    photos = get_meta(sys.argv[1])
     return json.dumps(photos)
 
 
@@ -51,17 +51,32 @@ def find_similar_photo():
             grouped_photo[current_hash] = [photo]
 
     os.chdir(workdir)
-    return json.dumps(grouped_photo)
+    out = [group for k, group in grouped_photo.items() if len(group) > 1]
+    # return json.dumps(grouped_photo)
+    return "similar photo is: %s" % str(out)
 
 
-def get_photos(path):
+def get_meta(path):
     workdir = os.getcwd()
     os.chdir(path)
 
     photos = glob.glob('*.JPG')
 
     with exiftool.ExifTool() as et:
-        metadata = et.get_metadata_batch(photos)
+        raw_metadata = et.get_metadata_batch(photos)
+
+    metadata = []
+    for raw_meta in raw_metadata:
+        meta = dict()
+        for k, v in raw_meta.items():
+            unpack_key = k.split(":")
+            if len(unpack_key) == 1:
+                meta[unpack_key[0]] = v
+            elif unpack_key[1] in meta:
+                pass
+            else:
+                meta[unpack_key[1]] = v
+        metadata.append(meta)
 
     os.chdir(workdir)
     return metadata

@@ -9,7 +9,7 @@ define(
             self.loadPhoto = function() {
                 $.getJSON("/photos").done(
                     function(data) {
-                        self.photos = data;
+                        self.photos(data);
                     }
                 );
             };

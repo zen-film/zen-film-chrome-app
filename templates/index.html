@@ -12,16 +12,16 @@
     </head>
     <body>
         <div class="buttons-block">
-            <button class="btn btn-fab btn-info btn-raised btn-sm"><i class="mdi mdi-action mdi-check-all"></i></button>
-            <button class="btn btn-fab btn-info btn-raised btn-sm"><i class="mdi mdi-action mdi-auto-fix"></i></button>
-            <button class="btn btn-fab btn-info btn-raised btn-sm"><i class="mdi mdi-action mdi-pencil"></i></button>
+            <button class="btn btn-fab btn-info btn-raised btn-sm"><i class="mdi mdi-action mdi-checkbox-marked-circle-outline"></i></button>
+            <button class="btn btn-fab btn-info btn-raised btn-sm"><i class="mdi mdi-action mdi-image-filter"></i></button>
             <button class="btn btn-fab btn-info btn-raised btn-sm"><i class="mdi mdi-action mdi-cloud-upload"></i></button>
+            <button class="btn btn-fab btn-info btn-raised btn-sm"><i class="mdi mdi-action mdi-play"></i></button>
+            <button class="btn btn-fab btn-info btn-raised btn-sm"><i class="mdi mdi-action mdi-pencil"></i></button>
         </div>
 
         <ul class="photo-grid" data-bind="foreach: photos">
             <li>
-                <p data-bind='text: SourceFile'></p>
-                <!-- <img data-bind='attr: { "src": SourceFile }' /> -->
+                <img class="photo" data-bind='attr: { "src": "/photo/"+SourceFile }' />
             </li>
         </ul>
     </body>
