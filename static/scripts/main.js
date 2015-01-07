@@ -1,10 +1,14 @@
 "use strict";
 
 require(
-    [ "knockout", "viewmodels/GridViewModel" ],
-    function(ko, GridViewModel) {
-        var gridViewModel = new GridViewModel();
-        gridViewModel.loadPhoto();
-        ko.applyBindings(gridViewModel);
+    [ "knockout", "models/AppModel", "viewmodels/AppViewModel" ],
+    function(ko, AppModel, AppViewModel) {
+        // Setup App
+        var appModel = AppModel.instance();
+        appModel.loadPhotos();
+        // Setup VM
+        var appViewModel = new AppViewModel();
+        // Ko
+        ko.applyBindings(appViewModel);
     }
 );

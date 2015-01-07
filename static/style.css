@@ -7,6 +7,27 @@ body
     font-family: 'Roboto', sans-serif;
 }
 
+.visuallyhidden {
+    border: 0;
+    clip: rect(0 0 0 0);
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    width: 1px;
+}
+
+.visuallyhidden.focusable:active,
+.visuallyhidden.focusable:focus {
+    clip: auto;
+    height: auto;
+    margin: 0;
+    overflow: visible;
+    position: static;
+    width: auto;
+}
+
 .wrap
 {
     height: 100vh;
@@ -67,10 +88,20 @@ body
     height: 100%;
 }
 
-.photo {
-    box-shadow: 0 0 0 4px #fff;
+.photo__wrap
+{
     position: relative;
     display: inline-block;
+}
+
+:checked + .photo
+{
+    box-shadow: 0 0 0 10px #8BC34A;
+    -webkit-animation: selected 0.3s cubic-bezier(0.250, 0.100, 0.250, 1.000);
+}
+
+.photo {
+    box-shadow: 0 0 0 4px #fff;
     margin: 10px;
     width: 157px;
     height: 157px;
@@ -80,12 +111,6 @@ body
 .photo:hover
 {
     transform: scale(.9);
-}
-
-.photo_selected
-{
-    box-shadow: 0 0 0 4px #8BC34A;
-    -webkit-animation: selected 0.3s cubic-bezier(0.250, 0.100, 0.250, 1.000);
 }
 
 @keyframes selected {

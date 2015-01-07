@@ -20,9 +20,17 @@
                 <button class="btn btn-fab btn-info btn-raised btn-sm"><i class="mdi mdi-action mdi-pencil"></i></button>
             </div>
 
-            <ul class="photo-grid" data-bind="foreach: photos">
-                <li class="photo">
-                    <img class="photo__item"data-bind='attr: { "src": "/photo/"+SourceFile }, click: $parent.selectToggle' />
+            <ul class="photo-grid" data-bind="foreach: gridViewModel.photos">
+                <li class="photo__wrap">
+                    <label data-bind="attr: {for: SourceFile}">
+                        <input class="visuallyhidden" type=checkbox data-bind="
+                            checkedValue: $data,
+                            checked: $root.gridViewModel.selectPhotos,
+                            attr: {id: SourceFile}"></input>
+                        <div class="photo">
+                            <img class="photo__item" data-bind="attr: {src: '/photo/' + SourceFile}">
+                        </div>
+                    </label>
                 </li>
             </ul>
             <ul class="editor editor_unhide">
