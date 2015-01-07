@@ -1,8 +1,12 @@
-"use strict";
+'use strict';
 
 define(
-    [ "viewmodels/GridViewModel" ],
-    function(GridViewModel) {
+    [
+        'viewmodels/GridViewModel'
+    ],
+    function(
+        GridViewModel
+    ) {
         function AppViewModel(){
             var self = this;
 

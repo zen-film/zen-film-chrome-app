@@ -1,8 +1,12 @@
-"use strict";
+'use strict';
 
 define(
-    [ "knockout", "jquery" ],
-    function(ko, $) {
+    [
+        'knockout', 'jquery'
+    ],
+    function(
+        ko, jquery
+    ) {
         function AppModel(){
             var self = this;
             self.photos = ko.observableArray();
@@ -10,7 +14,7 @@ define(
             self.loadPhotos = function() {
                 var self = this;
 
-                $.getJSON("/photos").done(
+                jquery.getJSON('/photos').done(
                     function(data) {
                         self.photos(data);
                     }
