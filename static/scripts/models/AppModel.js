@@ -2,21 +2,36 @@
 
 define(
     [
-        'knockout', 'jquery'
+        'knockout', 'jquery', 'models/PhotoModel'
     ],
     function(
-        ko, jquery
+        ko, jQuery, PhotoModel
     ) {
         function AppModel(){
             var self = this;
+
             self.photos = ko.observableArray();
+            self.selectPhotos = ko.observableArray();
 
             self.loadPhotos = function() {
                 var self = this;
 
-                jquery.getJSON('/photos').done(
+                jQuery.getJSON('/photos').done(
                     function(data) {
-                        self.photos(data);
+                        data.map(function(photoProp) {
+                            var photoObj = new PhotoModel(photoProp);
+                            self.photos.push(photoObj);
+                        });
+                    }
+                );
+            };
+
+            self.loadGear = function() {
+                var self = this;
+
+                jQuery.getJSON('/gear').done(
+                    function(data) {
+                        return data;
                     }
                 );
             };

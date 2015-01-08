@@ -3,6 +3,9 @@
         <title>ZEN &middot; FILM</title>
         <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.1/css/bootstrap.min.css">
         <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-material-design/0.2.1/css/material.min.css">
+        <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-material-design/0.2.1/css/ripples.min.css">
+        <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/select2/3.5.2/select2.min.css">
+        <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/select2/3.5.2/select2-bootstrap.min.css">
         <link rel="stylesheet" href="/vendor/mdi/materialdesignicons.css">
         <link rel="stylesheet" href="/static/style.css">
         <script src="//cdnjs.cloudflare.com/ajax/libs/require.js/2.1.15/require.min.js"></script>
@@ -12,14 +15,6 @@
     </head>
     <body>
         <div class="wrap">
-            <div class="buttons-block">
-                <!-- <button data-bind="click: $root.selectAllToggle()" class="btn btn-fab btn-info btn-raised btn-sm"><i class="mdi mdi-action mdi-checkbox-marked-circle-outline"></i></button> -->
-                <!-- <button onclick="document.location='/magick'" class="btn btn-fab btn-info btn-raised btn-sm"><i class="mdi mdi-action mdi-image-filter"></i></button> -->
-                <button class="btn btn-fab btn-info btn-raised btn-sm"><i class="mdi mdi-action mdi-cloud-upload"></i></button>
-                <button class="btn btn-fab btn-info btn-raised btn-sm"><i class="mdi mdi-action mdi-play"></i></button>
-                <button class="btn btn-fab btn-info btn-raised btn-sm"><i class="mdi mdi-action mdi-pencil"></i></button>
-            </div>
-
             <ul class="photo-grid" data-bind="foreach: gridViewModel.photos">
                 <li class="photo__wrap">
                     <label data-bind="attr: {for: SourceFile}">
@@ -28,24 +23,57 @@
                             checked: $root.gridViewModel.selectPhotos,
                             attr: {id: SourceFile}"></input>
                         <div class="photo">
-                            <img class="photo__item" data-bind="attr: {src: '/photo/' + SourceFile}">
+                            <div class="photo__item"
+                                 data-bind="attr: {style: 'background-image:url(\'/photo/'+ SourceFile + '\')'}">
+                            </div>
                         </div>
                     </label>
                 </li>
             </ul>
+
             <ul class="editor editor_unhide">
                 <li class="editor__section">
-                    <h1 class="editor__header">About</h1>
-                    <ul class="editor__inner">
-                        <li>
-                            <i class="mdi editor__icon mdi-cloud-upload"></i>
-                            <p class="editor__title">Текст</p>
-                            <input class="editor__input" type="text">
+                    <ul class="editor__inner"
+                        data-bind="foreach: {data: Object.keys(editorViewModel.allProps), as: 'key'}">
+                        <li class="input-group editor__field">
+                            <span class="input-group-addon">
+                                <i data-bind="attr: {class: 'mdi editor__icon ' + $root.editorViewModel.watchingProps[key].icon}"></i>
+                            </span>
+                            <span class="form-control-wrapper">
+                                <!-- ko if: $root.editorViewModel.watchingProps[key].handler == 'simple' -->
+                                    <input
+                                        class="editor__input form-control"
+                                        type="text"
+                                        data-bind="
+                                            value: $root.editorViewModel.allProps[key],
+                                            attr: {placeholder: $root.editorViewModel.watchingProps[key].placeholder}
+                                        ">
+                                    <div class="floating-label">
+                                        <p class="editor__title" data-bind="text: $root.editorViewModel.watchingProps[key].title"></p>
+                                    </div>
+                                    <span class="material-input"></span>
+                                <!-- /ko -->
+                                <!-- ko if: $root.editorViewModel.watchingProps[key].handler == 'select' -->
+                                    <select class="editor__input form-control" data-bind="
+                                        options: $root.editorViewModel.watchingProps[key].data,
+                                        optionsValue: 'id',
+                                        optionsText: 'text',
+                                        value: $root.editorViewModel.allProps[key] ">
+                                    </select>
+                                <!-- /ko -->
+                            </span>
                         </li>
                     </ul>
                 </li>
-                <li class="editor__section"></li>
+                <li>
+                    <div class="map"></div>
+                </li>
             </ul>
+
+            <!-- <div class="buttons-block">
+                <button class="btn btn-fab btn-success btn-raised btn-sm"><i class="mdi mdi-action mdi-cloud-upload"></i></button>
+                <button class="btn btn-fab btn-success btn-raised btn-sm"><i class="mdi mdi-action mdi-arrow-down-bold-circle-outline"></i></button>
+            </div> -->
         </div>
     </body>
 </html>

@@ -23,6 +23,11 @@ def vendor_static(filename):
     return send_from_directory('bower_components', filename)
 
 
+@app.route('/gear')
+def get_gear():
+    return send_from_directory('', 'gear.json')
+
+
 @app.route('/')
 def index():
     return render_template('index.html')

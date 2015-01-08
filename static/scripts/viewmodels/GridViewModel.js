@@ -17,7 +17,7 @@ define(
             var app = AppModel.instance();
 
             self.photos = app.photos;
-            self.selectPhotos = ko.observableArray();
+            self.selectPhotos = app.selectPhotos;
         }
         return GridViewModel;
     }
