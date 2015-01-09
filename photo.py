@@ -1,12 +1,12 @@
-from flask import Flask, render_template, url_for, send_from_directory
+from flask import Flask, render_template, request, send_from_directory
 import sys
 import glob
 import os
 import json
 import exiftool
 from PIL import Image
-from dhash import dhash
-
+from image_hash import image_hash
+et = exiftool.ExifTool()
 DEBUG = True
 
 app = Flask(__name__)
@@ -23,11 +23,6 @@ def vendor_static(filename):
     return send_from_directory('bower_components', filename)
 
 
-@app.route('/gear')
-def get_gear():
-    return send_from_directory('', 'gear.json')
-
-
 @app.route('/')
 def index():
     return render_template('index.html')
@@ -37,6 +32,11 @@ def index():
 def json_photo():
     photos = get_meta(sys.argv[1])
     return json.dumps(photos)
+
+
+@app.route('/gear')
+def get_gear():
+    return send_from_directory('', 'gear.json')
 
 
 @app.route('/magick')
@@ -49,7 +49,8 @@ def find_similar_photo():
 
     grouped_photo = dict()
     for photo in photos:
-        current_hash = dhash(Image.open(path + photo))
+        # 5 - подобранно опытным путем
+        current_hash = image_hash(Image.open(path + photo), 5)
         if current_hash in grouped_photo:
             grouped_photo[current_hash].append(photo)
         else:
@@ -61,13 +62,28 @@ def find_similar_photo():
     return "similar photo is: %s" % str(out)
 
 
+@app.route('/update', methods=['POST'])
+def update_handler():
+    request_data = json.dumps(request.json)
+    data = json.loads(request_data)
+
+    for file, params in data.items():
+        set_meta(sys.argv[1], file, params)
+    return '200'
+
+
+def set_meta(path, filename, prop):
+    with et:
+        et.set_tags(prop, '%s/%s' % (path, filename))
+
+
 def get_meta(path):
     workdir = os.getcwd()
     os.chdir(path)
 
     photos = glob.glob('*.JPG')
 
-    with exiftool.ExifTool() as et:
+    with et:
         raw_metadata = et.get_metadata_batch(photos)
 
     metadata = []
