@@ -2,27 +2,29 @@
 
 require(
     [
-        'knockout',
-        'material', 'ripples',
-        'select2', 'bindings/select2',
+        'knockout', 'ymaps', 'fotorama', 'jquery',
 
         'models/AppModel', 'viewmodels/AppViewModel'
     ],
     function(
-        ko,
-
-        material, ripples,
-        select2, bindSelect2,
+        ko, ymaps, fotoramka, jQuery,
 
         AppModel, AppViewModel
         ) {
-        ko.bindingHandlers.select2 = bindSelect2;
         // Setup App
         var appModel = AppModel.instance();
         appModel.loadPhotos();
+        appModel.loadGear();
+
+        jQuery('.fotorama').on('.fotorama:ready', function(e, fotorama){
+            jQuery('#fullscreen').on('click', function(){
+                debugger;
+                fotorama.requestFullScreen();
+            });
+        });
+
         // Setup VM
         var appViewModel = new AppViewModel();
-        appViewModel.gear = appModel.loadGear();
         window.av = appViewModel;
         // Ko
         ko.applyBindings(appViewModel);

@@ -3,20 +3,16 @@
 define(
     [
         'viewmodels/GridViewModel',
-        'viewmodels/EditorViewModel',
-        'viewmodels/MapViewModel'
+        'viewmodels/EditorViewModel'
     ],
     function(
         GridViewModel,
-        EditorViewModel,
-        MapViewModel
+        EditorViewModel
     ) {
         function AppViewModel(){
             var self = this;
-            window.AVM = self;
             self.gridViewModel = new GridViewModel();
             self.editorViewModel = new EditorViewModel();
-            self.mapViewModel = new MapViewModel([55, 44]);
         }
         return AppViewModel;
     }

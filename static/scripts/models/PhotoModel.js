@@ -14,7 +14,6 @@ define(
             self.currentProp = ko.pureComputed(function() {
                 var currentProp = jquery.extend(
                     true, self.prop, self.unsavedProp());
-                console.log('>>>>>>>>>>>>>', currentProp);
                 return currentProp;
             }, this);
 

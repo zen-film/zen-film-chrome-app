@@ -12,6 +12,7 @@ define(
 
             self.photos = ko.observableArray();
             self.selectPhotos = ko.observableArray();
+            self.gear = ko.observable({});
 
             self.loadPhotos = function() {
                 var self = this;
@@ -26,12 +27,42 @@ define(
                 );
             };
 
+            self.saveMeta = function() {
+                var output = {};
+                for (var i = 1; i < self.photos().length; i++) {
+                    var currentPhoto = self.photos()[i];
+                    if (Object.keys(currentPhoto.unsavedProp()).length > 0) {
+                        var photoName = currentPhoto.currentProp().SourceFile;
+                        output[photoName] = currentPhoto.unsavedProp();
+                    }
+                }
+                output = JSON.stringify(output);
+                console.log(output);
+
+                var onSuccess = function() {
+                    console.log('Saved!');
+                    // window.app = self;
+                    // self.photos = ko.observableArray([]);
+                    // self.selectPhotos = ko.observableArray([]);
+                    // self.loadPhotos();
+                };
+
+                jQuery.ajax({
+                    type: 'POST',
+                    url: '/update',
+                    data: output,
+                    success: onSuccess,
+                    contentType : 'application/json',
+                    dataType: 'json'
+                });
+            };
+
             self.loadGear = function() {
                 var self = this;
 
                 jQuery.getJSON('/gear').done(
                     function(data) {
-                        return data;
+                        self.gear(data);
                     }
                 );
             };

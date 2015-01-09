@@ -2,19 +2,21 @@
 
 define(
     [
-        'ymaps', 'jquery'
+        'ymaps', 'jquery', 'models/AppModel'
     ],
     function(
-        ymaps, jquery
+        ymaps, jquery, AppModel
     ) {
-        function MapViewModel(center){
+        function MapViewModel(){
             var self = this;
+            var app = AppModel.instance();
+
 
             ymaps.ready(function(){
                 var mapDomElem = jquery('.map');
 
-                self._map = new ymaps.Map(mapDomElem, {
-                    center : center,
+                app.map = new ymaps.Map(mapDomElem, {
+                    center : [44,55],
                     zoom: 10,
                     controls: [
                         'zoomControl',
@@ -23,28 +25,17 @@ define(
                         'fullscreenControl'
                     ]
                 });
-
-                self._map.events.add('click', function (e){
-                    var coords = e.get('coords');
-
-                    // self._map.geoObjects.each(function(geoObject){
-                    //     self._map.geoObjects.remove(geoObject);
-                    // });
-
-                    self.createPlacemark(coords);
-                });
             });
 
-            self.createPlacemark = function(coords){
-                self._map.geoObjects.add(
-                    new ymaps.Placemark(coords, {}, {
-                        preset: 'islands#dotIcon',
-                        iconColor: '#8bc34a',
-                        draggable: true
-                    })
-                );
-                self._map.setBounds(self._map.geoObjects.getBounds());
-            };
+            // self.createPlacemark = function(coords){
+            //     app.map.geoObjects.add(
+            //         new ymaps.Placemark(coords, {}, {
+            //             preset: 'islands#dotIcon',
+            //             iconColor: '#8bc34a'
+            //         })
+            //     );
+            //     app.map.setBounds(app.map.geoObjects.getBounds());
+            // };
         }
         return MapViewModel;
     }
