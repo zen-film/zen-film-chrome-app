@@ -1,39 +1,33 @@
 {
-    "Camera": [
-        {
-            "Model" : "Zenit ET",
+    "Camera": {
+        "Zenit ET" : {
             "Make" : "Krasnogorskiy zavod im. S. A. Zvereva (KMZ)",
             "SerialNumber" : 82365225,
             "CropFactor" : 1
         },
-        {
-            "Model" : "Canon 3",
+        "Canon 3" : {
             "Make" : "Canon"
         },
-        {
-            "Model" : "Canon 600D",
+        "Canon 600D" : {
             "Make" : "Canon",
             "CropFactor" : 1.6
         }
-    ],
-    "Lens": [
-        {
-            "Model" : "Helios 44-2",
+    },
+    "Lens": {
+        "Helios 44-2" : {
             "Manufacturer" : "Upiter",
             "FocalLength" : 58
         },
-        {
-            "Model" : "Canon EF-S 55-250mm f/4-5.6 IS",
+        "Canon EF-S 55-250mm f/4-5.6 IS" : {
             "Manufacturer" : "Canon",
             "FocalLength" : "55-250"
         }
-    ],
-    "Film" : [
-        {
-            "Name" : "Superia",
+    },
+    "Film" : {
+        "Superia" : {
             "Maker" : "Fuji",
             "Type" : 135,
             "ISO" : 200
         }
-    ]
+    }
 }
