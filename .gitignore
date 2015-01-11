@@ -6,4 +6,5 @@ bower_components
 test/bower_components
 test
 venv
+handlers
 __pycache__

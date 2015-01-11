@@ -5,29 +5,82 @@
             "SerialNumber" : 82365225,
             "CropFactor" : 1
         },
-        "Canon 3" : {
+        "Canon eos 3" : {
             "Make" : "Canon"
         },
-        "Canon 600D" : {
+        "Canon eos 600D" : {
             "Make" : "Canon",
             "CropFactor" : 1.6
         }
     },
     "Lens": {
         "Helios 44-2" : {
-            "Manufacturer" : "Upiter",
-            "FocalLength" : 58
+            "LensManufacturer" : "Upiter",
+            "FocalLength" : 58,
+            "MaxApertureValue" : 2,
+            "MinApertureValue" : 16
         },
         "Canon EF-S 55-250mm f/4-5.6 IS" : {
-            "Manufacturer" : "Canon",
-            "FocalLength" : "55-250"
+            "LensManufacturer" : "Canon",
+            "FocalLength" : "55-250",
+            "MaxApertureValue" : "4-6.6"
         }
     },
     "Film" : {
-        "Superia" : {
+        "Ilford SFX 200" : {
+            "Maker" : "Ilford",
+            "Type" : 135,
+            "ISO" : 200
+        },
+        "Kodak Portra 400" : {
+            "Maker" : "Kodak",
+            "Type" : 135,
+            "ISO" : 400
+        },
+        "Kodak Portra 160" : {
+            "Maker" : "Kodak",
+            "Type" : 135,
+            "ISO" : 160
+        },
+        "Kodak Ektar 100" : {
+            "Maker" : "Kodak",
+            "Type" : 135,
+            "ISO" : 100
+        },
+        "Kodak Gold 200" : {
+            "Maker" : "Kodak",
+            "Type" : 135,
+            "ISO" : 200
+        },
+        "Kodak Color Plus 200" : {
+            "Maker" : "Kodak",
+            "Type" : 135,
+            "ISO" : 200
+        },
+        "Fuji PRO 400H" : {
+            "Maker" : "Fuji",
+            "Type" : 135,
+            "ISO" : 400
+        },
+        "Fuji Superia 200" : {
             "Maker" : "Fuji",
             "Type" : 135,
             "ISO" : 200
+        },
+        "Rollei Nightburd 800" : {
+            "Maker" : "Rollei",
+            "Type" : 135,
+            "ISO" : 800
+        },
+        "Agfa Vista 100" : {
+            "Maker" : "Agfa",
+            "Type" : 135,
+            "ISO" : 100
+        },
+        "Konica Centuria 100" : {
+            "Maker" : "Konica",
+            "Type" : 135,
+            "ISO" : 100
         }
     }
 }

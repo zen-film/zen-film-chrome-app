@@ -15,10 +15,28 @@ define(
             var self = this;
             var app = AppModel.instance();
             self.selectPhotos = app.selectPhotos;
+            self.photos = app.photos;
             self.gear = app.gear;
 
             self.saveMeta = app.saveMeta;
 
+            /**
+             * Параметры за которыми мы следим
+             *
+             * Формат описания
+             *
+             * Название объекта = название параметра из exif
+             * Поля объекта
+             * Общие:
+             *  handler (String) с название обработчика
+             *  title (String) заголовок поля
+             *  icon (String) название иконки
+             * Для handler == 'simple'
+             *  placeholdel (String) Заглушка
+             * Для handler == 'select'
+             *  data (function) функция, которая возвращает список доступных опций, в формате {id: id, text: 'text'}
+             *  custom (Boolean) флаг (нереализованно), возможность ввести своё значение
+             */
             self.watchingProps = {
                 Title : {
                     handler : 'simple',
@@ -30,16 +48,22 @@ define(
                 },
                 // Human info
                 Creator: {
-                    icon : 'mdi-account',
+                    icon: 'mdi-account',
                     placeholder : 'Whois shot this?',
-                    handler : 'simple',
+                    handler: 'simple',
                     title: 'Author'
                 },
                 UserComment: {
-                    icon : 'mdi-message-image',
-                    placeholder : 'Cool photo, all right?',
-                    handler : 'simple',
-                    title: 'Comments'
+                    icon: 'mdi-message-image',
+                    placeholder: 'Cool photo, all right?',
+                    handler: 'simple',
+                    title: 'Commentaries'
+                },
+                DateTime: {
+                    icon: 'mdi-calendar',
+                    placeholder: 'When shot this photo?',
+                    handler: 'simple',
+                    title: 'Date with format: YYYY:MM:DD HH:MM:SS'
                 },
                 // About gear
                 Model : {
@@ -78,18 +102,19 @@ define(
                     icon: 'mdi-film',
                     custom: true,
                     data: function() {
-                        window.test = self;
-                        console.log(self);
                         var filmsObj = self.gear().Film,
                             film = Object.keys(filmsObj || {}),
                             out = [{id: 'Unknown', text: 'Unknown'}];
 
                         for (var i in film) {
-                            var filmName = [filmsObj[film[i]].Maker, film[i], filmsObj[film[i]].ISO].join(' ');
+                            var filmName = film[i];
                             out.push({id: filmName, text: filmName + ' / type: ' + filmsObj[film[i]].Type});
                         }
                         return out;
                     }
+                },
+                GPSLongitude : {
+                    handler: 'maps'
                 },
                 ExposureNumber: {
                     icon : 'mdi-sort-numeric',
@@ -99,16 +124,22 @@ define(
                 },
                 RollId: {
                     icon : 'mdi-film',
-                    placeholder : '1234',
+                    placeholder : '3512',
                     handler : 'simple',
                     title: 'Film roll id'
                 },
                 // About photo
                 FocalLength: {
-                    icon : 'mdi-image-filter-center-focus',
+                    icon : 'mdi-eye',
                     placeholder : 'FocalLength',
                     handler : 'simple',
                     title: 'FocalLength'
+                },
+                Aperture: {
+                    icon : 'mdi-camera-iris',
+                    placeholder : 'Aperture',
+                    handler : 'simple',
+                    title: 'Aperture'
                 },
                 ISO: {
                     placeholder : 'ISO',
@@ -118,41 +149,37 @@ define(
                 ShutterSpeed: {
                     handler: 'select',
                     title: 'Shutter speed',
-                    custom: false,
-                    icon: 'mdi-timer',
+                    icon: 'mdi-clock',
+                    custom: true,
                     data: function(){
-                        return [
-                            { id: 0.002, text: '1/500 sec'},
-                            { id: 60, text: '1 min'},
-                            { id: 30, text: '30 sec'},
-                            { id: 15, text: '15 sec'},
-                            { id: 8, text: '8 sec'},
-                            { id: 4, text: '4 sec'},
-                            { id: 2, text: '2 sec'},
-                            { id: 1, text: '1 sec'},
-                            { id: 0.5, text: '1/2 sec'},
-                            { id: 0.25, text: '1/4 sec'},
-                            { id: 0.125, text: '1/8 sec'},
-                            { id: 0.05, text: '1/20 sec'},
-                            { id: 0.02, text: '1/50 sec'},
-                            { id: 0.01, text: '1/100 sec'},
-                            { id: 0.008, text: '1/125 sec'},
-                            { id: 0.005, text: '1/200 sec'},
-                            { id: 0.003125, text: '1/320 sec'},
-                            { id: 0.0025, text: '1/400 sec'},
-                            { id: 0.002, text: '1/500 sec'},
-                            { id: 0.0015625, text: '1/640 sec'},
-                            { id: 0.00125, text: '1/800 sec'},
-                            { id: 0.000625, text: '1/1600 sec'},
-                            { id: 0.0005, text: '1/2000 sec'},
-                            { id: 0.0004, text: '1/2500 sec'},
-                            { id: 0.0003125, text: '1/3200 sec'},
-                            { id: 0.00025, text: '1/4000 sec'},
-                            { id: 0.0002, text: '1/5000 sec'},
-                            { id: 0.00015625, text: '1/6400 sec'},
-                            { id: 0.000125, text: '1/8000 sec'},
-                            { id: 0, text: 'Unknown'},
-                        ];
+                        var out = [],
+                            shutterSpeedList = [
+                                8000, 6400, 5000, 4000, 3200, 2500, 2000, 1600, 800,
+                                640, 500, 400, 320, 200, 125, 100, 50, 20, 8, 2,
+                                (1/1), (1/2), (1/4), (1/8), (1/15), (1/30),
+                                (1/60), (1/(60*1.3)), (1/(60*1.6)), (1/(60*2)),
+                                (1/(60*2.5)), (1/(60*3.2)), (1/(60*4)), (1/(60*5)),
+                                (1/(60*6)), (1/(60*8)), (1/(60*10)), (1/(60*13)),
+                                (1/(60*15)), (1/(60*20)), (1/(60*25)), (1/(60*30))
+                            ];
+
+
+                        for (var i in shutterSpeedList) {
+                            var mathSpeed = 1/shutterSpeedList[i],
+                                rawSpeed = shutterSpeedList[i],
+                                outText = '';
+
+                            (mathSpeed < 1)?
+                                outText = '1/' + rawSpeed + ' sec' :
+                                (mathSpeed < 60)?
+                                    outText = mathSpeed + ' sec':
+                                    outText = (mathSpeed / 60) + ' min';
+
+                            out.push({id: mathSpeed, text: outText });
+
+                        }
+                        out.push({ id: 0, text: 'Unknown'});
+                        return out;
                     }
                 },
                 MeteringMode : {
@@ -173,11 +200,11 @@ define(
                         ];
                     }
                 },
-                GPSLongitude : {
-                    handler: 'maps'
-                }
             };
 
+            /**
+             * Определение того что показать в редакторе
+             */
             self.currentState = ko.pureComputed(function() {
                 var photos = this.selectPhotos();
 
@@ -236,22 +263,22 @@ define(
 
                     var out =  simpleHandler(prop, warningText[prop].empty, warningText[prop].notCommon);
 
-                    // if (['Model', 'Lens', 'Film'].indexOf(prop) + 1) {
-                    //     var gearType;
+                    // if (out !== 'Unknown') {
+                    //     if (['Model', 'Lens', 'Film'].indexOf(prop) + 1) {
+                    //         var gearType;
                     //
-                    //     switch (['Model', 'Lens', 'Film'].indexOf(prop)) {
-                    //         case 0:
-                    //             gearType = 'Camera';
-                    //             break;
-                    //         case 1:
-                    //             gearType = 'Lens';
-                    //             break;
-                    //         case 2:
-                    //             gearType = 'Film';
-                    //             break;
-                    //     }
+                    //         switch (['Model', 'Lens', 'Film'].indexOf(prop)) {
+                    //             case 0:
+                    //                 gearType = 'Camera';
+                    //                 break;
+                    //             case 1:
+                    //                 gearType = 'Lens';
+                    //                 break;
+                    //             case 2:
+                    //                 gearType = 'Film';
+                    //                 break;
+                    //         }
                     //
-                    //     if (out !== 'Unknown') {
                     //         var currentGear = self.gear()[gearType][out],
                     //             currentGearExtend = Object.keys(currentGear || {});
                     //
@@ -265,49 +292,80 @@ define(
                 };
 
                 var gpsHandler = function(prop) {
-                    // if (!self.map) {
-                    //     var mapDomElem = document.getElementsByClassName('map')[0];
-                    //
-                    //     self.map = new ymaps.Map(mapDomElem, {
-                    //         center : [44,55],
-                    //         zoom: 10,
-                    //         controls: [
-                    //             'zoomControl',
-                    //             'searchControl',
-                    //             'typeSelector',
-                    //             'fullscreenControl'
-                    //         ]
-                    //     });
-                    //
-                    //     self.map.createPlacemark = function(coords){
-                    //         self.map.geoObjects.add(
-                    //             new ymaps.Placemark(coords, {}, {
-                    //                 preset: 'islands#dotIcon',
-                    //                 iconColor: '#8bc34a'
-                    //             })
-                    //         );
-                    //         self.map.setBounds(app.map.geoObjects.getBounds());
-                    //     };
-                    // }
-                    var out = simpleHandler(prop);
-                    return out;
-                };
+                    if (!self.map) {
+                        ymaps.ready(function(){
+                            var mapDomElem = document.getElementsByClassName('map')[0];
 
-                var fabrique = function(obj, props) {
-                    (function(){
-                        var handlers = {
-                            simple : simpleHandler,
-                            select : selectHandler,
-                            maps : gpsHandler
-                        };
-                        for (var prop in props) {
-                            var _prop = prop;
-                            obj[_prop] = handlers[self.watchingProps[_prop].handler](_prop);
+                            self.map = new ymaps.Map(mapDomElem, {
+                                center : [44,55],
+                                zoom: 2,
+                                controls: [
+                                    'zoomControl',
+                                    'searchControl',
+                                    'typeSelector',
+                                    'fullscreenControl'
+                                ]
+                            });
+
+                            // self.map.geoObjects.add(new ymaps.Clusterer());
+
+                            self.map.events.add('click', function(e) {
+                                var coords = e.get('coords');
+
+                                // self.map.geoObjects.get(0).removeAll();
+                                self.map.geoObjects.removeAll();
+
+                                self.map.createPlacemark(coords, true);
+
+                                self.updatePhotosProp('GPSLatitude', coords[0]);
+                                self.updatePhotosProp('GPSLatitudeRef', 'N');
+                                self.updatePhotosProp('GPSLongitude', coords[1]);
+                                self.updatePhotosProp('GPSLongitudeRef', 'E');
+                                self.updatePhotosProp('GPSMapDatum', 'WGS-84');
+                                self.updatePhotosProp('GPSVersionId', '2 0 0 0');
+                                self.updatePhotosProp('GPSPosition', coords.join(' '));
+                            });
+
+                            self.map.createPlacemark = function(coords, noBounds) {
+                                noBounds = noBounds || false;
+
+                                // var collection = self.map.geoObjects.get(0);
+                                var collection = self.map.geoObjects;
+
+                                collection.add(
+                                    new ymaps.Placemark(coords, {}, {
+                                        preset: 'islands#dotIcon',
+                                        iconColor: '#8bc34a'
+                                    })
+                                );
+                                !noBounds && self.map.setBounds(collection.getBounds(), {checkZoomRange: true, zoomMargin: 2});
+                            };
+                        });
+                    } else {
+                        self.map.geoObjects.removeAll();
+                        for (var photoId in photos) {
+                            var currentPhoto = photos[photoId].currentProp();
+                            if (currentPhoto.GPSLongitude && currentPhoto.GPSLatitude) {
+                                ymaps.ready(self.map.createPlacemark(
+                                    [currentPhoto.GPSLatitude, currentPhoto.GPSLongitude]
+                                ));
+                            }
                         }
-                    }());
+                    }
                 };
 
-                fabrique(state, self.watchingProps);
+
+                var handlersBind = {
+                    simple : simpleHandler,
+                    select : selectHandler,
+                    maps : gpsHandler
+                };
+
+                for (var _prop in self.watchingProps) {
+                    var prop = _prop;
+                    state[prop] = handlersBind[self.watchingProps[prop].handler](prop);
+                }
+
                 return state;
 
             }, self);
@@ -320,26 +378,34 @@ define(
                 }
             };
 
-            self.allProps = {};
-            for (var prop in self.watchingProps) {
-                (function(){
-                    var _prop = prop;
-                    if (self.watchingProps.hasOwnProperty(_prop)) {
-                        self.allProps[_prop] = ko.pureComputed(
-                            {
-                                write: function(value) {
-                                    console.log(_prop, value);
-                                    self.updatePhotosProp(_prop, value);
-                                },
-                                read: function() {
-                                    var _state = self.currentState();
-                                    var state = _state[_prop] || '';
-                                    return state;
-                                },
-                                owner: this
-                            }
-                        );
+            self.haveUnsavedProp = function() {
+                var photos = self.photos();
+                for (var photoId in photos) {
+                    var unsaved = photos[photoId].unsavedProp();
+                    if (Object.keys(unsaved).length > 1) {
+                        return true;
                     }
+                }
+                return false;
+            };
+
+            self.allProps = {};
+            for (var _prop in self.watchingProps) {
+                (function(){
+                    var prop = _prop;
+                    self.allProps[prop] = ko.pureComputed(
+                        {
+                            write: function(value) {
+                                self.updatePhotosProp(prop, value);
+                            },
+                            read: function() {
+                                var _state = self.currentState();
+                                var state = _state[prop] || '';
+                                return state;
+                            },
+                            owner: this
+                        }
+                    );
                 }());
             }
         }

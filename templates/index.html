@@ -32,15 +32,16 @@
                 </li>
             </ul>
 
-            <!-- TODO: Сделай фотораму! Будь мужиком! -->
-            <!-- <div class="fotorama fotorama__wrapper" data-allowfullscreen="true" data-bind="foreach: gridViewModel.selectPhotos">
-                <img data-bind="attr: {src='/photo/'+ SourceFile}"/>
-            </div> -->
+            <!-- ko if: $root.gridViewModel.selectPhotos().length -->
+            <div class="fotorama fotorama__wrapper" data-auto="false" data-allowfullscreen="true" data-bind="foreach: gridViewModel.selectPhotos">
+                <img data-bind="attr: {src: '/photo/'+ SourceFile}"/>
+            </div>
             <div class="button__wrapper">
-                <button id="fullscreen" class="button btn btn-fab btn-success btn-raised btn-sm">
-                    <i class="mdi mdi-action mdi-arrow-down-bold-circle-outline"></i>
+                <button data-bind="click: $root.gridViewModel.showGallery" class="btn btn-fab btn-success btn-raised btn-sm button">
+                    <i class="mdi mdi-action mdi-play"></i>
                 </button>
             </div>
+            <!-- /ko -->
 
             <ul class="editor editor_unhide">
                 <li class="editor__section">
@@ -77,13 +78,17 @@
                                     <span class="material-input"></span>
                                 <!-- /ko -->
                                 <!-- ko if: $root.editorViewModel.watchingProps[key].handler == 'maps' -->
-                                    <div class="map"></div>
+                                    <div class="map__wrapper">
+                                        <div class="map"></div>
+                                    </div>
                                 <!-- /ko -->
                             </span>
                         </li>
                     </ul>
                 </li>
-                <a data-bind="click: $root.editorViewModel.saveMeta" class="btn btn-info btn-raised editor__btn_save">Save</a>
+                <!-- ko if: $root.editorViewModel.haveUnsavedProp() -->
+                    <a data-bind="click: $root.editorViewModel.saveMeta" class="btn btn-info btn-raised editor__btn_save">Save</a>
+                <!-- /ko -->
             </ul>
 
             <!-- <div class="buttons-block">

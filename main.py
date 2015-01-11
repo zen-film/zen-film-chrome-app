@@ -1,26 +1,45 @@
 from flask import Flask, render_template, request, send_from_directory
+
+import os
 import sys
 import glob
-import os
+
 import json
 import exiftool
+
 from PIL import Image
 from image_hash import image_hash
-et = exiftool.ExifTool()
+
 DEBUG = True
+
+et = exiftool.ExifTool()
 
 app = Flask(__name__)
 app.config.from_object(__name__)
 
 
 @app.route('/photo/<filename>')
-def photo_static(filename):
+def photos_static(filename):
+    '''
+    Отдаем фотографию по запросу
+    '''
     return send_from_directory(sys.argv[1], filename)
 
 
 @app.route('/vendor/<path:filename>')
 def vendor_static(filename):
+    '''
+    Локально расположенные стороние библиотеки
+    '''
     return send_from_directory('bower_components', filename)
+
+
+@app.route('/gear')
+def get_gear():
+    '''
+    Отправляем информацию о оборудование # или лучше убрать в static?
+    '''
+    return send_from_directory('', 'gear.json')
 
 
 @app.route('/')
@@ -29,20 +48,29 @@ def index():
 
 
 @app.route('/photos')
-def json_photo():
+def exif_to_json():
+    '''
+    Отдаем страничку
+    '''
     photos = get_meta(sys.argv[1])
     return json.dumps(photos)
 
 
-@app.route('/gear')
-def get_gear():
-    return send_from_directory('', 'gear.json')
+@app.route('/update', methods=['POST'])
+def json_to_exif():
+    request_data = json.dumps(request.json)
+    data = json.loads(request_data)
+
+    for file, params in data.items():
+        set_meta(sys.argv[1], file, params)
+    return '200'
 
 
 @app.route('/magick')
-def find_similar_photo():
+def find_similar_photos():
     workdir = os.getcwd()
     path = sys.argv[1]
+
     os.chdir(path)
 
     photos = glob.glob('*.JPG')
@@ -50,7 +78,7 @@ def find_similar_photo():
     grouped_photo = dict()
     for photo in photos:
         # 5 - подобранно опытным путем
-        current_hash = image_hash(Image.open(path + photo), 5)
+        current_hash = image_hash(Image.open(os.getcwd() + photo), 5)
         if current_hash in grouped_photo:
             grouped_photo[current_hash].append(photo)
         else:
@@ -58,18 +86,8 @@ def find_similar_photo():
 
     os.chdir(workdir)
     out = [group for k, group in grouped_photo.items() if len(group) > 1]
-    # return json.dumps(grouped_photo)
-    return "similar photo is: %s" % str(out)
-
-
-@app.route('/update', methods=['POST'])
-def update_handler():
-    request_data = json.dumps(request.json)
-    data = json.loads(request_data)
-
-    for file, params in data.items():
-        set_meta(sys.argv[1], file, params)
-    return '200'
+    return json.dumps(out)
+    # return "similar photo is: %s" % str(out)
 
 
 def set_meta(path, filename, prop):
