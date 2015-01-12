@@ -68,6 +68,10 @@ def json_to_exif():
 
 @app.route('/magick')
 def find_similar_photos():
+    '''
+    Поиск похожих фотографии
+    Возвращает список списков похожих фотографий
+    '''
     workdir = os.getcwd()
     path = sys.argv[1]
 
@@ -78,7 +82,7 @@ def find_similar_photos():
     grouped_photo = dict()
     for photo in photos:
         # 5 - подобранно опытным путем
-        current_hash = image_hash(Image.open(os.getcwd() + photo), 5)
+        current_hash = image_hash(Image.open(os.getcwd() + "/" + photo), 5)
         if current_hash in grouped_photo:
             grouped_photo[current_hash].append(photo)
         else:
