@@ -1,4 +1,5 @@
-from flask import Flask, render_template, request, send_from_directory
+from flask import Flask, render_template
+from flask import request, send_from_directory, make_response
 
 import os
 import sys
@@ -9,13 +10,26 @@ import exiftool
 
 from PIL import Image
 from image_hash import image_hash
-
-DEBUG = True
+# from authomatic.adapters import WerkzeugAdapter
+# from authomatic import Authomatic
+# import flickrapi
+# from config import CONFIG
 
 et = exiftool.ExifTool()
 
+# try:
+#     if sys.argv[2] is True:
+# api_key = 'a8e63eee3671d28941a1d5ac6fd4867f'
+# api_secret = '56f85d80637824da'
+# flickr = flickrapi.FlickrAPI(api_key, api_secret)
+# flickr.authenticate_via_browser(perms='write')
+# except IndexError:
+    # pass
+
 app = Flask(__name__)
 app.config.from_object(__name__)
+
+# authomatic = Authomatic(CONFIG, 'mysecretstring', report_errors=False)
 
 
 @app.route('/photo/<filename>')
@@ -91,7 +105,6 @@ def find_similar_photos():
     os.chdir(workdir)
     out = [group for k, group in grouped_photo.items() if len(group) > 1]
     return json.dumps(out)
-    # return "similar photo is: %s" % str(out)
 
 
 def set_meta(path, filename, prop):
@@ -125,4 +138,4 @@ def get_meta(path):
     return metadata
 
 if __name__ == "__main__":
-    app.run()
+    app.run(debug=True)

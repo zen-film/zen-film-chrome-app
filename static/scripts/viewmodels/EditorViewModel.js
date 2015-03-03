@@ -307,13 +307,13 @@ define(
                                 ]
                             });
 
-                            // self.map.geoObjects.add(new ymaps.Clusterer());
+                            self.map.geoObjects.add(new ymaps.Clusterer());
 
                             self.map.events.add('click', function(e) {
                                 var coords = e.get('coords');
 
-                                // self.map.geoObjects.get(0).removeAll();
-                                self.map.geoObjects.removeAll();
+                                self.map.geoObjects.get(0).removeAll();
+                                // self.map.geoObjects.removeAll();
 
                                 self.map.createPlacemark(coords, true);
 
@@ -329,8 +329,8 @@ define(
                             self.map.createPlacemark = function(coords, noBounds) {
                                 noBounds = noBounds || false;
 
-                                // var collection = self.map.geoObjects.get(0);
-                                var collection = self.map.geoObjects;
+                                var collection = self.map.geoObjects.get(0);
+                                // var collection = self.map.geoObjects;
 
                                 collection.add(
                                     new ymaps.Placemark(coords, {}, {
@@ -342,7 +342,7 @@ define(
                             };
                         });
                     } else {
-                        self.map.geoObjects.removeAll();
+                        self.map.geoObjects.get(0).removeAll();
                         for (var photoId in photos) {
                             var currentPhoto = photos[photoId].currentProp();
                             if (currentPhoto.GPSLongitude && currentPhoto.GPSLatitude) {
