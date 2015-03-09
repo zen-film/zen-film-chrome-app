@@ -7,7 +7,7 @@ define(
     function(
         ko, jQuery, PhotoModel
     ) {
-        function AppModel(){
+        function AppModel() {
             var self = this;
 
             self.photos = ko.observableArray();
@@ -67,7 +67,6 @@ define(
                 );
             };
         }
-
 
         AppModel.instance = function() {
             if (!AppModel._instance) {
