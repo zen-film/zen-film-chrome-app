@@ -8,28 +8,12 @@ import glob
 import json
 import exiftool
 
-from PIL import Image
-from image_hash import image_hash
-# from authomatic.adapters import WerkzeugAdapter
-# from authomatic import Authomatic
-# import flickrapi
-# from config import CONFIG
+from similar_photo import get_similar_photos
 
 et = exiftool.ExifTool()
 
-# try:
-#     if sys.argv[2] is True:
-# api_key = 'a8e63eee3671d28941a1d5ac6fd4867f'
-# api_secret = '56f85d80637824da'
-# flickr = flickrapi.FlickrAPI(api_key, api_secret)
-# flickr.authenticate_via_browser(perms='write')
-# except IndexError:
-    # pass
-
 app = Flask(__name__)
 app.config.from_object(__name__)
-
-# authomatic = Authomatic(CONFIG, 'mysecretstring', report_errors=False)
 
 
 @app.route('/photo/<filename>')
@@ -45,13 +29,14 @@ def vendor_static(filename):
     '''
     Локально расположенные стороние библиотеки
     '''
-    return send_from_directory('bower_components', filename)
+    return send_from_directory('libs', filename)
 
 
 @app.route('/gear')
 def get_gear():
     '''
-    Отправляем информацию о оборудование # или лучше убрать в static?
+    Отправляем информацию о оборудование
+    TODO: Подумать быть может лучше убрать в static
     '''
     return send_from_directory('', 'gear.json')
 
@@ -82,28 +67,7 @@ def json_to_exif():
 
 @app.route('/magick')
 def find_similar_photos():
-    '''
-    Поиск похожих фотографии
-    Возвращает список списков похожих фотографий
-    '''
-    workdir = os.getcwd()
-    path = sys.argv[1]
-
-    os.chdir(path)
-
-    photos = glob.glob('*.JPG')
-
-    grouped_photo = dict()
-    for photo in photos:
-        # 5 - подобранно опытным путем
-        current_hash = image_hash(Image.open(os.getcwd() + "/" + photo), 5)
-        if current_hash in grouped_photo:
-            grouped_photo[current_hash].append(photo)
-        else:
-            grouped_photo[current_hash] = [photo]
-
-    os.chdir(workdir)
-    out = [group for k, group in grouped_photo.items() if len(group) > 1]
+    out = get_similar_photos(sys.argv[1], 5)
     return json.dumps(out)
 
 
@@ -138,4 +102,10 @@ def get_meta(path):
     return metadata
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    try:
+        if os.path.isdir(sys.argv[1]):
+            app.run(debug=True)
+        else:
+            exit('{} is not directory'.format(sys.argv[1]))
+    except IndexError:
+        exit('Add path to folder')

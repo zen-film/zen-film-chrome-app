@@ -4,7 +4,10 @@ dist
 .sass-cache
 bower_components
 test/bower_components
+photoalbum/libs
 test
 venv
 handlers
 __pycache__
+htmlcov
+.coverage

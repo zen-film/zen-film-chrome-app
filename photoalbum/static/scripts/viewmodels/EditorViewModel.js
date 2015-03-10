@@ -35,7 +35,7 @@ define(
              *  placeholdel (String) Заглушка
              * Для handler == 'select'
              *  data (function) функция, которая возвращает список доступных опций, в формате {id: id, text: 'text'}
-             *  custom (Boolean) флаг (нереализованно), возможность ввести своё значение
+             *  custom (Boolean) флаг (не реализована), возможность ввести своё значение
              */
             self.watchingProps = {
                 Title : {
@@ -72,8 +72,8 @@ define(
                     icon: 'mdi-camera',
                     custom: true,
                     data: function() {
-                        var cameras = Object.keys(self.gear().Camera || {}),
-                            out = [{id: 'Unknown', text: 'Unknown'}];
+                        var cameras = Object.keys(self.gear().Camera || {});
+                        var out = [{id: 'Unknown', text: 'Unknown'}];
                         for (var i in cameras) {
                             var model = cameras[i];
                             out.push({id: model, text: model});
@@ -86,9 +86,9 @@ define(
                     title: 'Lens model',
                     icon: 'mdi-album',
                     custom: true,
-                    data: function(){
-                        var lens = Object.keys(self.gear().Lens || {}),
-                            out = [{id: 'Unknown', text: 'Unknown'}];
+                    data: function() {
+                        var lens = Object.keys(self.gear().Lens || {});
+                        var out = [{id: 'Unknown', text: 'Unknown'}];
                         for (var i in lens) {
                             var model = lens[i];
                             out.push({id: model, text: model});
@@ -102,9 +102,9 @@ define(
                     icon: 'mdi-film',
                     custom: true,
                     data: function() {
-                        var filmsObj = self.gear().Film,
-                            film = Object.keys(filmsObj || {}),
-                            out = [{id: 'Unknown', text: 'Unknown'}];
+                        var filmsObj = self.gear().Film;
+                        var film = Object.keys(filmsObj || {});
+                        var out = [{id: 'Unknown', text: 'Unknown'}];
 
                         for (var i in film) {
                             var filmName = film[i];
@@ -151,28 +151,27 @@ define(
                     title: 'Shutter speed',
                     icon: 'mdi-clock',
                     custom: true,
-                    data: function(){
-                        var out = [],
-                            shutterSpeedList = [
+                    data: function() {
+                        var out = [];
+                        var shutterSpeedList = [
                                 8000, 6400, 5000, 4000, 3200, 2500, 2000, 1600, 800,
                                 640, 500, 400, 320, 200, 125, 100, 50, 20, 8, 2,
-                                (1/1), (1/2), (1/4), (1/8), (1/15), (1/30),
-                                (1/60), (1/(60*1.3)), (1/(60*1.6)), (1/(60*2)),
-                                (1/(60*2.5)), (1/(60*3.2)), (1/(60*4)), (1/(60*5)),
-                                (1/(60*6)), (1/(60*8)), (1/(60*10)), (1/(60*13)),
-                                (1/(60*15)), (1/(60*20)), (1/(60*25)), (1/(60*30))
+                                (1 / 1), (1 / 2), (1 / 4), (1 / 8), (1 / 15), (1 / 30),
+                                (1 / 60), (1 / (60 * 1.3)), (1 / (60 * 1.6)), (1 / (60 * 2)),
+                                (1 / (60 * 2.5)), (1 / (60 * 3.2)), (1 / (60 * 4)), (1 / (60 * 5)),
+                                (1 / (60 * 6)), (1 / (60 * 8)), (1 / (60 * 10)), (1 / (60 * 13)),
+                                (1 / (60 * 15)), (1 / (60 * 20)), (1 / (60 * 25)), (1 / (60 * 30))
                             ];
 
-
                         for (var i in shutterSpeedList) {
-                            var mathSpeed = 1/shutterSpeedList[i],
-                                rawSpeed = shutterSpeedList[i],
-                                outText = '';
+                            var mathSpeed = 1 / shutterSpeedList[i];
+                            var rawSpeed = shutterSpeedList[i];
+                            var outText = '';
 
-                            (mathSpeed < 1)?
+                            (mathSpeed < 1) ?
                                 outText = '1/' + rawSpeed + ' sec' :
-                                (mathSpeed < 60)?
-                                    outText = mathSpeed + ' sec':
+                                (mathSpeed < 60) ?
+                                    outText = mathSpeed + ' sec' :
                                     outText = (mathSpeed / 60) + ' min';
 
                             out.push({id: mathSpeed, text: outText });
@@ -187,8 +186,8 @@ define(
                     title: 'Metering Mode',
                     icon: 'mdi-image-filter-tilt-shift',
                     custom: false,
-                    data: function(){
-                        return  [
+                    data: function() {
+                        return [
                             { id: 0, text: 'Unknown'},
                             { id: 1, text: 'Average'},
                             { id: 2, text: 'Center Weighted Average'},
@@ -217,9 +216,9 @@ define(
 
                 var isCommon = function(prop) {
                     var firstPhotoProp = photos[0].currentProp();
-                    for(var i = 1; i < photos.length; i++) {
+                    for (var i = 1; i < photos.length; i++) {
                         var iPhotoProp = photos[i].currentProp();
-                        if(iPhotoProp[prop] !== firstPhotoProp[prop]) {
+                        if (iPhotoProp[prop] !== firstPhotoProp[prop]) {
                             return false;
                         }
                     }
@@ -229,10 +228,10 @@ define(
                 var simpleHandler = function(prop, empty, notCommon) {
                     empty = empty || '';
                     notCommon = notCommon || 'Different value';
-                    var out = photos.length?
-                                isCommon(prop)?
-                                    first(prop):
-                                    notCommon:
+                    var out = photos.length ?
+                                isCommon(prop) ?
+                                    first(prop) :
+                                    notCommon :
                                 empty;
                     return out;
                 };
@@ -291,13 +290,13 @@ define(
                     return out;
                 };
 
-                var gpsHandler = function(prop) {
+                var gpsHandler = function() {
                     if (!self.map) {
-                        ymaps.ready(function(){
+                        ymaps.ready(function() {
                             var mapDomElem = document.getElementsByClassName('map')[0];
 
                             self.map = new ymaps.Map(mapDomElem, {
-                                center : [44,55],
+                                center : [44, 55],
                                 zoom: 2,
                                 controls: [
                                     'zoomControl',
@@ -338,7 +337,8 @@ define(
                                         iconColor: '#8bc34a'
                                     })
                                 );
-                                !noBounds && self.map.setBounds(collection.getBounds(), {checkZoomRange: true, zoomMargin: 2});
+                                !noBounds && self.map.setBounds(collection.getBounds(),
+                                    {checkZoomRange: true, zoomMargin: 2});
                             };
                         });
                     } else {
@@ -353,7 +353,6 @@ define(
                         }
                     }
                 };
-
 
                 var handlersBind = {
                     simple : simpleHandler,
@@ -391,7 +390,7 @@ define(
 
             self.allProps = {};
             for (var _prop in self.watchingProps) {
-                (function(){
+                (function() {
                     var prop = _prop;
                     self.allProps[prop] = ko.pureComputed(
                         {

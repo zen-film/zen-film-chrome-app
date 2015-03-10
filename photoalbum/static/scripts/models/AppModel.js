@@ -41,10 +41,6 @@ define(
 
                 var onSuccess = function() {
                     console.log('Saved!');
-                    // window.app = self;
-                    // self.photos = ko.observableArray([]);
-                    // self.selectPhotos = ko.observableArray([]);
-                    // self.loadPhotos();
                 };
 
                 jQuery.ajax({

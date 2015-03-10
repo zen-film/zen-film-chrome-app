@@ -1,0 +1,18 @@
+{
+  "excludeFiles": [
+    ".git",
+    "libs",
+    "node_modules",
+    "venv"
+  ],
+  "lang": "ru",
+  "fileExtensions": [
+    ".md",
+    ".js",
+    ".css"
+  ],
+  "dictionary": [
+    "контрол",
+    "юзабилити"
+  ]
+}

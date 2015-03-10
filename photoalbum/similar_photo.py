@@ -1,3 +1,5 @@
+import os
+import glob
 from PIL import Image
 
 
@@ -38,3 +40,27 @@ def image_hash(image, hash_size=8):
 
     # Шаг 5
     return ''.join(hex_string)
+
+
+def get_similar_photos(path, nicety):
+    '''
+    Поиск похожих фотографии
+    Возвращает список списков похожих фотографий
+    '''
+    workdir = os.getcwd()
+    os.chdir(path)
+
+    photos = glob.glob('*.JPG')
+
+    grouped_photo = dict()
+    for photo in photos:
+        # 5 - подобранно опытным путем
+        current_hash = image_hash(
+            Image.open(os.getcwd() + "/" + photo), nicety)
+        if current_hash in grouped_photo:
+            grouped_photo[current_hash].append(photo)
+        else:
+            grouped_photo[current_hash] = [photo]
+
+    os.chdir(workdir)
+    return [group for k, group in grouped_photo.items() if len(group) > 1]
