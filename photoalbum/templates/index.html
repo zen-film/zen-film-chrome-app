@@ -15,21 +15,33 @@
         <script src="/static/scripts/main.js"></script>
     </head>
     <body>
+        <script type="text/html" id="photo-template">
+            <label data-bind="attr: {for: SourceFile}">
+                <input class="visuallyhidden" type=checkbox data-bind="
+                    checkedValue: $data,
+                    checked: $root.gridViewModel.selectPhotos,
+                    attr: {id: SourceFile}"></input>
+                <div class="photo">
+                    <div class="photo__item"
+                         data-bind="attr: {style: 'background-image:url(\'/photo/'+ SourceFile + '\')'}">
+                    </div>
+                </div>
+            </label>
+        </script>
         <div class="wrap">
-            <ul class="photo-grid" data-bind="foreach: gridViewModel.photos">
-                <li class="photo__wrap">
-                    <label data-bind="attr: {for: SourceFile}">
-                        <input class="visuallyhidden" type=checkbox data-bind="
-                            checkedValue: $data,
-                            checked: $root.gridViewModel.selectPhotos,
-                            attr: {id: SourceFile}"></input>
-                        <div class="photo">
-                            <div class="photo__item"
-                                 data-bind="attr: {style: 'background-image:url(\'/photo/'+ SourceFile + '\')'}">
-                            </div>
-                        </div>
-                    </label>
-                </li>
+            <ul class="photo-grid" data-bind="foreach: gridViewModel.photosWithGroups">
+                <!-- ko if: ($data instanceof Array) -->
+                    <li style="background: black">
+                        <ul data-bind="foreach: $data">
+                            <li class="photo__wrap" data-bind="template: { name: 'photo-template', data: $data }">
+                            </li>
+                        </ul>
+                    </li>
+                <!-- /ko -->
+                <!-- ko ifnot: ($data instanceof Array) -->
+                    <li class="photo__wrap" data-bind="template: { name: 'photo-template', data: $data }">
+                    </li>
+                <!-- /ko -->
             </ul>
 
             <!-- ko if: $root.gridViewModel.selectPhotos().length -->

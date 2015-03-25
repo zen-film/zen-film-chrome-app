@@ -11,18 +11,38 @@ define(
             var self = this;
 
             self.photos = ko.observableArray();
+            self.photosWithGroups = ko.observable();
             self.selectPhotos = ko.observableArray();
             self.gear = ko.observable({});
 
             self.loadPhotos = function() {
-                var self = this;
-
-                jQuery.getJSON('/photos').done(
-                    function(data) {
-                        data.map(function(photoProp) {
-                            var photoObj = new PhotoModel(photoProp);
-                            self.photos.push(photoObj);
-                        });
+                jQuery.getJSON('/similar').done(
+                    function(similarResult) {
+                        var photosWithGroups = [];
+                        var i;
+                        for (i = 0; i < similarResult.length; i++) {
+                            photosWithGroups.push([]);
+                        }
+                        jQuery.getJSON('/photos').done(
+                            function(data) {
+                                data.forEach(function(photoProp) {
+                                    var photoObj = new PhotoModel(photoProp);
+                                    self.photos.push(photoObj);
+                                    var similarGroupIndex = null;
+                                    similarResult.forEach(function(simGroup, index) {
+                                        if (simGroup.indexOf(photoObj.SourceFile) > -1) {
+                                            similarGroupIndex = index;
+                                            photosWithGroups[index].push(photoObj);
+                                        }
+                                    });
+                                    if (similarGroupIndex === null) {
+                                        photosWithGroups.push(photoObj);
+                                    }
+                                });
+                                self.photosWithGroups(photosWithGroups);
+                                console.log(self.photosWithGroups);
+                            }
+                        );
                     }
                 );
             };

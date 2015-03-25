@@ -17,6 +17,7 @@ define(
             var app = AppModel.instance();
 
             self.photos = app.photos;
+            self.photosWithGroups = app.photosWithGroups;
             self.selectPhotos = app.selectPhotos;
 
             self.showGallery = function() {
