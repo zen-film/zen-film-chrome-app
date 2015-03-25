@@ -19,6 +19,21 @@ define(
             self.gear = app.gear;
 
             self.mapIsActive = ko.observable(false);
+            self.leaveFromMapInterval = false;
+
+            self.mouseleaveMapHandler = function() {
+                self.leaveFromMapInterval = setTimeout(
+                    function() {
+                        self.mapIsActive(false);
+                    },
+                    1500
+                );
+            };
+
+            self.mouseenterMapHandler = function() {
+                clearTimeout(self.leaveFromMapInterval);
+                self.mapIsActive(true);
+            };
 
             self.saveMeta = app.saveMeta;
 

@@ -88,9 +88,8 @@
                                         </div>
                                         <div style="width: 100%; height: 100%" class="map" data-bind="
                                             event: {
-                                                mouseleave: function(e) {
-                                                    $root.editorViewModel.mapIsActive(false)
-                                                }
+                                                mouseleave: $root.editorViewModel.mouseleaveMapHandler,
+                                                mouseenter: $root.editorViewModel.mouseenterMapHandler
                                             }"></div>
                                     </div>
                                 <!-- /ko -->
