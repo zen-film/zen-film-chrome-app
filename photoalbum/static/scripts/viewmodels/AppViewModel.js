@@ -9,7 +9,7 @@ define(
         GridViewModel,
         EditorViewModel
     ) {
-        function AppViewModel(){
+        function AppViewModel() {
             var self = this;
             self.gridViewModel = new GridViewModel();
             self.editorViewModel = new EditorViewModel();

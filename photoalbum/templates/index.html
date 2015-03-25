@@ -49,7 +49,7 @@
                         data-bind="foreach: {data: Object.keys(editorViewModel.allProps), as: 'key'}, blah: console.log(key)">
                         <li class="input-group editor__field">
                             <span class="input-group-addon">
-                                <i data-bind="attr: {class: 'mdi editor__icon ' + $root.editorViewModel.watchingProps[key].icon}"></i>
+                                <i class="mdi editor__icon" data-bind="css: $root.editorViewModel.watchingProps[key].icon"></i>
                             </span>
                             <span class="form-control-wrapper">
                                 <!-- ko if: $root.editorViewModel.watchingProps[key].handler == 'simple' -->
@@ -79,7 +79,19 @@
                                 <!-- /ko -->
                                 <!-- ko if: $root.editorViewModel.watchingProps[key].handler == 'maps' -->
                                     <div class="map__wrapper">
-                                        <div class="map"></div>
+                                        <div class="map__overlay noselect" data-bind="
+                                            visible: !$root.editorViewModel.mapIsActive(),
+                                            click: function() {
+                                                $root.editorViewModel.mapIsActive(true);
+                                            }">
+                                            <span class="map__overlay-icon">₸</span>
+                                        </div>
+                                        <div style="width: 100%; height: 100%" class="map" data-bind="
+                                            event: {
+                                                mouseleave: function(e) {
+                                                    $root.editorViewModel.mapIsActive(false)
+                                                }
+                                            }"></div>
                                     </div>
                                 <!-- /ko -->
                             </span>

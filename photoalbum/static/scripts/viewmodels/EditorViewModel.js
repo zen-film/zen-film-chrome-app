@@ -18,6 +18,8 @@ define(
             self.photos = app.photos;
             self.gear = app.gear;
 
+            self.mapIsActive = ko.observable(false);
+
             self.saveMeta = app.saveMeta;
 
             /**
@@ -142,6 +144,7 @@ define(
                     title: 'Aperture'
                 },
                 ISO: {
+                    icon: 'mdi-earth',
                     placeholder : 'ISO',
                     handler : 'simple',
                     title: 'ISO'

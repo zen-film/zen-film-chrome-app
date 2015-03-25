@@ -11,7 +11,7 @@ define(
 
         AppModel
     ) {
-        function GridViewModel(){
+        function GridViewModel() {
             var self = this;
 
             var app = AppModel.instance();
