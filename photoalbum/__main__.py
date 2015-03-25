@@ -19,7 +19,7 @@ app.config.from_object(__name__)
 @app.route('/photo/<filename>')
 def photos_static(filename):
     '''
-    Отдаем фотографию по запросу
+    Get photos handler
     '''
     return send_from_directory(sys.argv[1], filename)
 
@@ -27,7 +27,7 @@ def photos_static(filename):
 @app.route('/vendor/<path:filename>')
 def vendor_static(filename):
     '''
-    Локально расположенные стороние библиотеки
+    Return vendor libs
     '''
     return send_from_directory('libs', filename)
 
@@ -35,8 +35,7 @@ def vendor_static(filename):
 @app.route('/gear')
 def get_gear():
     '''
-    Отправляем информацию о оборудование
-    TODO: Подумать быть может лучше убрать в static
+    Return gear info
     '''
     return send_from_directory('', 'gear.json')
 
@@ -49,7 +48,7 @@ def index():
 @app.route('/photos')
 def exif_to_json():
     '''
-    Отдаем страничку
+    Return page
     '''
     photos = get_meta(sys.argv[1])
     return json.dumps(photos)
@@ -59,13 +58,16 @@ def exif_to_json():
 def json_to_exif():
     request_data = json.dumps(request.json)
     data = json.loads(request_data)
-
+    # for file in data['delete'].items():
+    #     os.delete(sys.path.abspath('{}/{}'.format(sys.argv[1], file)))
+    # for file, params in data['update'].items():
+    #     set_meta(sys.argv[1], file, params)
     for file, params in data.items():
         set_meta(sys.argv[1], file, params)
     return '200'
 
 
-@app.route('/magick')
+@app.route('/similar')
 def find_similar_photos():
     out = get_similar_photos(sys.argv[1], 5)
     return json.dumps(out)
@@ -103,7 +105,8 @@ def get_meta(path):
 
 if __name__ == "__main__":
     try:
-        if os.path.isdir(sys.argv[1]):
+        path = sys.argv[1]
+        if os.path.isdir(path):
             app.run(debug=True)
         else:
             exit('{} is not directory'.format(sys.argv[1]))
