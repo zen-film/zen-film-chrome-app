@@ -31,8 +31,8 @@
         <div class="wrap">
             <ul class="photo-grid" data-bind="foreach: gridViewModel.photosWithGroups">
                 <!-- ko if: ($data instanceof Array) -->
-                    <li style="background: black">
-                        <ul data-bind="foreach: $data">
+                    <li class="photo__wrap--similar">
+                        <ul class="photo--similar" data-bind="foreach: $data">
                             <li class="photo__wrap" data-bind="template: { name: 'photo-template', data: $data }">
                             </li>
                         </ul>

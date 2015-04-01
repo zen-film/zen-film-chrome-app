@@ -162,6 +162,17 @@ body
     background-size: cover;
 }
 
+.photo--similar
+{
+    padding: 1em;
+}
+
+.photo__wrap--similar
+{
+    background: #000;
+    display: inline-block;
+}
+
 .photo__wrap
 {
     position: relative;
