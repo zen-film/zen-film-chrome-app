@@ -8,20 +8,60 @@ import glob
 import json
 import exiftool
 
+import vk_auth
+import json
+import urllib.request as urllib
+from urllib.parse import urlencode
+# import os
+import getpass
+# import sys
+
 from similar_photo import get_similar_photos
+token = None
+def call_api(method, params, token):
+    params.append(("access_token", token))
+    url = "https://api.vk.com/method/{}?{}".format(method, urlencode(params))
+    res = urllib.urlopen(url).read().decode('utf-8')
+    return json.loads(str(res))["response"]
 
-et = exiftool.ExifTool()
+def get_albums(user_id, token):
+    return call_api("photos.getAlbums", [("uid", user_id)], token)
 
+def get_photos_urls(user_id, album_id, token):
+    photos_list = call_api("photos.get", [("uid", user_id), ("aid", album_id)], token)
+    result = {}
+    for photo in photos_list:
+        if "src_xxbig" in photo:
+            url = photo["src_xxbig"]
+        elif "src_xbig" in photo:
+            url = photo["src_xbig"]
+        elif "src_big" in photo:
+            url = photo["src_big"]
+        else:
+            url = photo["src"]
+        result.update({url: photo['pid']})
+    return result
+# et = exiftool.ExifTool()
+
+def get_urls():
+    # email = input("Login: ")
+    email = "+79226018274"
+    # password = getpass.getpass()
+    password = "gook0hvov"
+    client_id = "4906664"
+    token, user_id = vk_auth.auth(email, password, client_id, "photos")
+    albums = get_albums(user_id, token)
+    print("\n".join("{}. {}".format(num, album["title"]) for num, album in enumerate(albums)))
+    choice = -1
+    while choice not in range(len(albums)):
+        choice = int(input("Choose album number: "))
+    return get_photos_urls(user_id, albums[choice]["aid"], token)
+
+photos_urls = get_urls()
 app = Flask(__name__)
 app.config.from_object(__name__)
 
 
-@app.route('/photo/<filename>')
-def photos_static(filename):
-    '''
-    Get photos handler
-    '''
-    return send_from_directory(sys.argv[1], filename)
 
 
 @app.route('/vendor/<path:filename>')
@@ -35,7 +75,7 @@ def vendor_static(filename):
 @app.route('/gear')
 def get_gear():
     '''
-    Return gear info
+    Return gear infourl
     '''
     return send_from_directory('', 'gear.json')
 
@@ -50,65 +90,27 @@ def exif_to_json():
     '''
     Return page
     '''
-    photos = get_meta(sys.argv[1])
+    photos = []
+    for url in photos_urls:
+        photos.append({'SourceFile': url})
     return json.dumps(photos)
 
 
-@app.route('/update', methods=['POST'])
-def json_to_exif():
+@app.route('/delete', methods=['POST'])
+def delete_photo():
     request_data = json.dumps(request.json)
     data = json.loads(request_data)
-    # for file in data['delete'].items():
-    #     os.delete(sys.path.abspath('{}/{}'.format(sys.argv[1], file)))
-    # for file, params in data['update'].items():
-    #     set_meta(sys.argv[1], file, params)
-    for file, params in data.items():
-        set_meta(sys.argv[1], file, params)
+    for url in data:
+        print('>>>>>>', photos_urls[url])
+
     return '200'
 
 
 @app.route('/similar')
 def find_similar_photos():
-    out = get_similar_photos(sys.argv[1], 5)
+    out = get_similar_photos(photos_urls, 5)
     return json.dumps(out)
 
 
-def set_meta(path, filename, prop):
-    with et:
-        et.set_tags(prop, '%s/%s' % (path, filename))
-
-
-def get_meta(path):
-    workdir = os.getcwd()
-    os.chdir(path)
-
-    photos = glob.glob('*.JPG')
-
-    with et:
-        raw_metadata = et.get_metadata_batch(photos)
-
-    metadata = []
-    for raw_meta in raw_metadata:
-        meta = dict()
-        for k, v in raw_meta.items():
-            unpack_key = k.split(":")
-            if len(unpack_key) == 1:
-                meta[unpack_key[0]] = v
-            elif unpack_key[1] in meta:
-                pass
-            else:
-                meta[unpack_key[1]] = v
-        metadata.append(meta)
-
-    os.chdir(workdir)
-    return metadata
-
 if __name__ == "__main__":
-    try:
-        path = sys.argv[1]
-        if os.path.isdir(path):
-            app.run(debug=True)
-        else:
-            exit('{} is not directory'.format(sys.argv[1]))
-    except IndexError:
-        exit('Add path to folder')
+    app.run(debug=True)

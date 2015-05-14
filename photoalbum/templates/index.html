@@ -23,101 +23,25 @@
                     attr: {id: SourceFile}"></input>
                 <div class="photo">
                     <div class="photo__item"
-                         data-bind="attr: {style: 'background-image:url(\'/photo/'+ SourceFile + '\')'}">
+                         data-bind="attr: {style: 'background-image:url('+SourceFile+')'}">
                     </div>
                 </div>
             </label>
         </script>
         <div class="wrap">
             <ul class="photo-grid" data-bind="foreach: gridViewModel.photosWithGroups">
-                <!-- ko if: ($data instanceof Array) -->
                     <li class="photo__wrap--similar">
+                <!-- ko if: ($data instanceof Array) -->
                         <ul class="photo--similar" data-bind="foreach: $data">
                             <li class="photo__wrap" data-bind="template: { name: 'photo-template', data: $data }">
                             </li>
                         </ul>
                     </li>
                 <!-- /ko -->
-                <!-- ko ifnot: ($data instanceof Array) -->
-                    <li class="photo__wrap" data-bind="template: { name: 'photo-template', data: $data }">
-                    </li>
-                <!-- /ko -->
             </ul>
-
-            <!-- ko if: $root.gridViewModel.selectPhotos().length -->
-            <div class="fotorama fotorama__wrapper" data-auto="false" data-allowfullscreen="true" data-bind="foreach: gridViewModel.selectPhotos">
-                <img data-bind="attr: {src: '/photo/'+ SourceFile}"/>
-            </div>
-            <div class="button__wrapper">
-                <button data-bind="click: $root.gridViewModel.showGallery" class="btn btn-fab btn-success btn-raised btn-sm button">
-                    <i class="mdi mdi-action mdi-play"></i>
-                </button>
-            </div>
-            <!-- /ko -->
-
-            <ul class="editor editor_unhide">
-                <li class="editor__section">
-                    <ul class="editor__inner"
-                        data-bind="foreach: {data: Object.keys(editorViewModel.allProps), as: 'key'}, blah: console.log(key)">
-                        <li class="input-group editor__field">
-                            <span class="input-group-addon">
-                                <i class="mdi editor__icon" data-bind="css: $root.editorViewModel.watchingProps[key].icon"></i>
-                            </span>
-                            <span class="form-control-wrapper">
-                                <!-- ko if: $root.editorViewModel.watchingProps[key].handler == 'simple' -->
-                                    <input
-                                        class="editor__input form-control"
-                                        type="text"
-                                        data-bind="
-                                            value: $root.editorViewModel.allProps[key],
-                                            attr: {placeholder: $root.editorViewModel.watchingProps[key].placeholder}
-                                        ">
-                                    <div class="floating-label">
-                                        <p class="editor__title" data-bind="text: $root.editorViewModel.watchingProps[key].title"></p>
-                                    </div>
-                                    <span class="material-input"></span>
-                                <!-- /ko -->
-                                <!-- ko if: $root.editorViewModel.watchingProps[key].handler == 'select' -->
-                                    <select class="editor__input form-control" data-bind="
-                                        options: $root.editorViewModel.watchingProps[key].data(),
-                                        optionsValue: 'id',
-                                        optionsText: 'text',
-                                        value: $root.editorViewModel.allProps[key] ">
-                                    </select>
-                                    <div class="floating-label">
-                                        <p class="editor__title" data-bind="text: $root.editorViewModel.watchingProps[key].title"></p>
-                                    </div>
-                                    <span class="material-input"></span>
-                                <!-- /ko -->
-                                <!-- ko if: $root.editorViewModel.watchingProps[key].handler == 'maps' -->
-                                    <div class="map__wrapper">
-                                        <div class="map__overlay noselect" data-bind="
-                                            visible: !$root.editorViewModel.mapIsActive(),
-                                            click: function() {
-                                                $root.editorViewModel.mapIsActive(true);
-                                            }">
-                                            <span class="map__overlay-icon">₸</span>
-                                        </div>
-                                        <div style="width: 100%; height: 100%" class="map" data-bind="
-                                            event: {
-                                                mouseleave: $root.editorViewModel.mouseleaveMapHandler,
-                                                mouseenter: $root.editorViewModel.mouseenterMapHandler
-                                            }"></div>
-                                    </div>
-                                <!-- /ko -->
-                            </span>
-                        </li>
-                    </ul>
-                </li>
-                <!-- ko if: $root.editorViewModel.haveUnsavedProp() -->
-                    <a data-bind="click: $root.editorViewModel.saveMeta" class="btn btn-info btn-raised editor__btn_save">Save</a>
-                <!-- /ko -->
-            </ul>
-
-            <!-- <div class="buttons-block">
-                <button class="btn btn-fab btn-success btn-raised btn-sm"><i class="mdi mdi-action mdi-cloud-upload"></i></button>
-
-            </div> -->
         </div>
+        <!-- ko if: $root.gridViewModel.selectPhotos().length -->
+            <a data-bind="click: $root.editorViewModel.delete" class="btn btn-danger btn-raised editor__btn_save">Delete</a>
+        <!-- /ko -->
     </body>
 </html>

@@ -47,6 +47,29 @@ define(
                 );
             };
 
+            self.delete = function() {
+                var output = []
+                // debugger;
+                for (var i = 0; i < self.selectPhotos().length; i++) {
+                    var currentPhoto = self.selectPhotos()[i];
+                    output.push(currentPhoto.SourceFile)
+                }
+                output = JSON.stringify(output);
+                console.log(output);
+                var onSuccess = function() {
+                    console.log('Saved!');
+                };
+
+                jQuery.ajax({
+                    type: 'POST',
+                    url: '/delete',
+                    data: output,
+                    success: onSuccess,
+                    contentType : 'application/json',
+                    dataType: 'json'
+                });
+            }
+
             self.saveMeta = function() {
                 var output = {};
                 for (var i = 1; i < self.photos().length; i++) {

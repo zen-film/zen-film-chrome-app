@@ -1,7 +1,8 @@
 import os
 import glob
 from PIL import Image
-
+import urllib.request as urllib
+import io
 
 def image_hash(image, hash_size=8):
     ''' Алгоритм просчета хеша от изображения
@@ -42,25 +43,24 @@ def image_hash(image, hash_size=8):
     return ''.join(hex_string)
 
 
-def get_similar_photos(path, nicety):
+def get_similar_photos(urls, nicety):
     '''
     Поиск похожих фотографии
     Возвращает список списков похожих фотографий
     '''
-    workdir = os.getcwd()
-    os.chdir(path)
-
-    photos = glob.glob('*.JPG')
 
     grouped_photo = dict()
-    for photo in photos:
-        # 5 - подобранно опытным путем
-        current_hash = image_hash(
-            Image.open(os.getcwd() + "/" + photo), nicety)
-        if current_hash in grouped_photo:
-            grouped_photo[current_hash].append(photo)
-        else:
-            grouped_photo[current_hash] = [photo]
+    for url in urls:
+        print(url)
+        current_photo = urllib.urlopen(url).read()
+        # test = open('../test_image/square_brown.JPG', 'rb')
 
-    os.chdir(workdir)
+        current_hash = image_hash(
+            Image.open(io.BytesIO(current_photo)), nicety)
+        if current_hash in grouped_photo:
+            grouped_photo[current_hash].append(url)
+        else:
+            grouped_photo[current_hash] = [url]
+
+    # os.chdir(workdir)
     return [group for k, group in grouped_photo.items() if len(group) > 1]

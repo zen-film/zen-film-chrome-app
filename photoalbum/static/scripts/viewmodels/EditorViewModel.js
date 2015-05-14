@@ -36,6 +36,7 @@ define(
             };
 
             self.saveMeta = app.saveMeta;
+            self.delete = app.delete;
 
             /**
              * Параметры за которыми мы следим
