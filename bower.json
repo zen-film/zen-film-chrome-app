@@ -1,7 +1,11 @@
 {
   "name": "film-utils",
   "version": "0.0.0",
-  "dependencies": {},
+  "dependencies": {
+    "font-awesome": "~4.4.0",
+    "piexifjs": "hMatoba/piexifjs",
+    "roboto-fontface": "~0.4.3"
+  },
   "devDependencies": {
     "chai": "~3.2.0",
     "mocha": "~2.3.0"
