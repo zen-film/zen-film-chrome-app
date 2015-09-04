@@ -3,6 +3,8 @@
   "version": "0.0.0",
   "dependencies": {
     "font-awesome": "~4.4.0",
+    "knockout": "~3.3.0",
+    "knockout-es5": "~0.3.0",
     "piexifjs": "hMatoba/piexifjs",
     "roboto-fontface": "~0.4.3"
   },

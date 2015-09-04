@@ -17,7 +17,6 @@
     </head>
     <body>
         <section class="grid">
-          <div class="selection-container">
             <div class="selection-highlights">
                 <input class="file-loader" style="display: none;" type="file" id="file-loader" multiple>
                 <div class="selection-highlight file-loader-highlight"></div>
@@ -29,31 +28,54 @@
                     </span>
                 </label>
             </div>
-          </div>
-          <svg xmlns="http://www.w3.org/2000/svg" version="1.1">
-            <defs>
-              <filter id="goo">
-                <feGaussianBlur in="SourceGraphic" stdDeviation="9" result="blur" />
-                <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 20 -6" result="goo" />
-                <feComposite in="SourceGraphic" in2="goo" operator="atop" result="goo"/>
-              </filter>
-            </defs>
-          </svg>
+            <svg xmlns="http://www.w3.org/2000/svg" version="1.1">
+                <defs>
+                  <filter id="goo">
+                    <feGaussianBlur in="SourceGraphic" stdDeviation="9" result="blur" />
+                    <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 20 -6" result="goo" />
+                    <feComposite in="SourceGraphic" in2="goo" operator="atop" result="goo"/>
+                  </filter>
+                </defs>
+            </svg>
         </section>
         <section class="sidebar">
-          <div class="exif-editor"></div>
-          <div class="action-bar">
-            <button class="action-button">
-                  <i class="fa fa-download"></i>
-            </button>
-            <button class="action-button" disabled>
-                <i class="fa fa-share-alt"></i>
-            </button>
-          </div>
+            <div class="user-bar">
+                <span class="user__picture">
+                    <i class="fa fa-user-secret"></i>
+                </span>
+                <span class="user__name">Anonymous</span>
+                <span class="user__action">
+                    <i class="fa fa-sign-in"></i>
+                </span>
+            </div>
+            <div class="exif-editor">
+                <span>
+                    <input class="input--type-text" id="title" type="text" placeholder="Awesome title" />
+                    <label for="title">Title</label>
+                </span>
+                <span>
+                    <input class="input--type-text" id="desc" type="text" placeholder="Awesome title" />
+                    <label for="desc">Descriptinal</label>
+                </span>
+                <span class="map__wrapper">
+                    <div class="map"></div>
+                </span>
+            </div>
+            <div class="action-bar">
+                <button class="action__button">
+                      <i class="fa fa-download"></i>
+                </button>
+                <button class="action__button" disabled>
+                    <i class="fa fa-share-alt"></i>
+                </button>
+            </div>
         </section>
 
         <!-- build:js scripts/vendor.js -->
         <!-- bower:js -->
+        <script src="bower_components/knockout/dist/knockout.js" charset="utf-8"></script>
+        <script src="bower_components/knockout-es5/dist/knockout-es5.min.js" charset="utf-8"></script>
+        <script src="bower_components/piexifjs/piexif.js" charset="utf-8"></script>
         <!-- endbower -->
         <!-- endbuild -->
 

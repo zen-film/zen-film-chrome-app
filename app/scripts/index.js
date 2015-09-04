@@ -22,7 +22,7 @@
             if (!f.type.match('image.*')) {
                 continue;
             }
-
+            console.log(f);
             var reader = new FileReader();
 
             // Closure to capture the file information.
