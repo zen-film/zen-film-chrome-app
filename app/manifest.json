@@ -1,7 +1,7 @@
 {
     "name": "__MSG_appName__",
     "description": "__MSG_appDescription__",
-    "version": "10",
+    "version": "13",
     "manifest_version": 2,
     "default_locale": "en",
     "permissions": [
@@ -15,7 +15,8 @@
         },
         "fullscreen",
         "geolocation",
-        "notifications",
+        "https://*.mapbox.com/",
+        "https://*.vk.com/",
         "<all_urls>"
     ],
     "icons": {
@@ -25,9 +26,10 @@
     "app": {
         "background": {
             "scripts": [
-                "scripts/main.js",
+                "scripts/background.js",
                 "scripts/chromereload.js"
             ]
         }
-    }
+    },
+    "offline_enabled": true
 }

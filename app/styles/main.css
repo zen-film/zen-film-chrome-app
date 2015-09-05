@@ -6,6 +6,8 @@ body {
     font-family: 'Roboto-Light';
     color: #ecf0f1;
     overflow: hidden;
+    font-size: 16px;
+    -webkit-user-select: none;
 }
 
 .grid
@@ -57,11 +59,57 @@ body {
 {
     flex-grow: 1;
     padding-left: 5px;
+    cursor: default;
 }
 
 .exif-editor
 {
     flex-grow: 1;
+}
+
+.map__wrapper
+{
+    width: 300px;
+    height: 300px;
+    margin-top: 10px;
+}
+
+.map__overlay
+{
+    position: absolute;
+    width: 300px;
+    height: 300px;
+
+    /*FUCKYEAH!*/
+    z-index: 1001;
+    background: rgba(0,0,0,.5);
+    color: #9B59B6;
+    text-align: center;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.map__overlay-icon
+{
+    font-size: 9em;
+    pointer-events: none;
+    line-height: 300px
+}
+
+#map__dummy-input
+{
+    position: absolute;
+}
+
+.map
+{
+    cursor: pointer;
+    width: 100%;
+    height: 100%;
 }
 
 .action-bar
@@ -193,12 +241,12 @@ body {
 .exif-editor span {
   position: relative;
   display: inline-block;
-  margin: 10px 10px 0;
+  margin-top: 10px;
 }
 
 .input--type-text {
   display: inline-block;
-  width: 260px;
+  width: 285px;
   height: 19px;
   padding: 10px 0 10px 15px;
   font-family: "Open Sans", sans;
@@ -206,7 +254,6 @@ body {
   color: #9b59b6;
   background: #efefef;
   border: 0;
-  border-radius: 3px;
   outline: 0;
   text-indent: 70px;
   transition: all .3s ease-in-out;
@@ -225,25 +272,32 @@ body {
   text-shadow: 0 1px 0 rgba(19, 74, 70, 0.4);
   background: #9b59b6;
   transition: all .3s ease-in-out;
-  border-top-left-radius: 3px;
-  border-bottom-left-radius: 3px;
+}
+
+.input--type-text:focus::-webkit-input-placeholder,
+.input--type-text:active::-webkit-input-placeholder {
+    color: #aaa;
+}
+.input--type-text:focus + label,
+.input--type-text:active + label {
+    transform: translateX(-100%);
+}
+
+.input--type-text[id="title"]
+{
+    text-indent: 50px;
+}
+
+.input--type-text[id="desc"]
+{
+    text-indent: 103px;
 }
 
 .input--type-text:focus,
 .input--type-text:active {
-  color: #9b59b6;
-  text-indent: 0;
-  background: #fff;
-  border-top-left-radius: 0;
-  border-bottom-left-radius: 0;
-}
-.input--type-text:focus::-webkit-input-placeholder,
-.input--type-text:active::-webkit-input-placeholder {
-  color: #aaa;
-}
-.input--type-text:focus + label,
-.input--type-text:active + label {
-  transform: translateX(-100%);
+      color: #9b59b6;
+      text-indent: 0;
+      background: #fff;
 }
 
 ::-webkit-scrollbar {

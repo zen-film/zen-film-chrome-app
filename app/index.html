@@ -4,24 +4,47 @@
         <meta charset="utf-8">
         <title>film utils</title>
 
-        <!-- build:css styles/vendor.css -->
-        <!-- bower:css -->
         <link rel="stylesheet" href="bower_components/roboto-fontface/css/roboto-fontface.css" />
         <link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.css" />
-        <!-- endbower -->
-        <!-- endbuild -->
 
-        <!-- build:css styles/main.css -->
+
         <link rel="stylesheet" href="styles/main.css">
-        <!-- endbuild -->
+        <link href='vendor/mapbox.css' rel='stylesheet' />
+        <link href='vendor/MarkerCluster.css' rel='stylesheet' />
+        <link href='vendor/MarkerCluster.Default.css' rel='stylesheet' />
     </head>
     <body>
+        <span id="browser-sync-binding"></span>
         <section class="grid">
             <div class="selection-highlights">
-                <input class="file-loader" style="display: none;" type="file" id="file-loader" multiple>
+                <!-- ko foreach: $root.gridViewModel.photos -->
+                <input
+                    type="checkbox"
+                    class="selection-checkbox"
+                    data-sbind="
+                        checkedValue: $data,
+                        checked:  $root.gridViewModel.selectPhotos,
+                        attr: {id: $data.file.name}
+                    "></input>
+                <div class="selection-highlight"></div>
+                <!-- /ko -->
+                <input
+                    class="file-loader"
+                    style="display: none;"
+                    type="file"
+                    id="file-loader"
+                    data-sbind="event: { click: $root.gridViewModel.fileSelectHandle }"
+                    multiple>
                 <div class="selection-highlight file-loader-highlight"></div>
             </div>
             <div class="selection-content">
+                <!-- ko foreach: $root.gridViewModel.photos -->
+                <label
+                    class="selection-item"
+                    data-bind="
+                        attr: {id: $data.file.name, style: 'background: url(' $data.img ')'
+                        "></label>
+                <!-- /ko -->
                 <label for="file-loader" class="selection-item">
                     <span class="selection-item-container">
                         <i class="fa fa-fw fa-plus"></i>
@@ -54,33 +77,40 @@
                     <label for="title">Title</label>
                 </span>
                 <span>
-                    <input class="input--type-text" id="desc" type="text" placeholder="Awesome title" />
-                    <label for="desc">Descriptinal</label>
+                    <input class="input--type-text" id="desc" type="text" placeholder="Awesome description" />
+                    <label for="desc">Description</label>
                 </span>
-                <span class="map__wrapper">
-                    <div class="map"></div>
-                </span>
+                <div class="map__wrapper">
+                    <div class="map__overlay" data-sbind="
+                        visible: !$root.editorViewModel.mapIsActive,
+                        click: $root.editorViewModel.toggleMapActiveState">
+                        <span class="map__overlay-icon"><i class="fa fa-hand-o-up"></i></span>
+                    </div>
+                    <div style="width: 100%; height: 100%" class="map" data-sbind="
+                        event: {
+                            mouseleave: $root.editorViewModel.mouseleaveMapHandler,
+                            mouseenter: $root.editorViewModel.mouseenterMapHandler
+                        }">
+                    </div>
+                </div>
             </div>
             <div class="action-bar">
-                <button class="action__button">
+                <button class="action__button" title="Save">
                       <i class="fa fa-download"></i>
                 </button>
-                <button class="action__button" disabled>
+                <button class="action__button" title="Showcase">
+                      <i class="fa fa-play"></i>
+                </button>
+                <button class="action__button" title="Share" disabled>
                     <i class="fa fa-share-alt"></i>
                 </button>
             </div>
         </section>
 
-        <!-- build:js scripts/vendor.js -->
-        <!-- bower:js -->
-        <script src="bower_components/knockout/dist/knockout.js" charset="utf-8"></script>
-        <script src="bower_components/knockout-es5/dist/knockout-es5.min.js" charset="utf-8"></script>
-        <script src="bower_components/piexifjs/piexif.js" charset="utf-8"></script>
-        <!-- endbower -->
-        <!-- endbuild -->
-
-        <!-- build:js scripts/index.js -->
+        <script src="vendor/require.js" charset="utf-8"></script>
+        <script src='vendor/mapbox.js'></script>
+        <script src='vendor/leaflet.markercluster.js'></script>
+        <script src="scripts/requireConfig.js"></script>
         <script src="scripts/index.js"></script>
-        <!-- endbuild -->
     </body>
 </html>

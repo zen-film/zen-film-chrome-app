@@ -5,6 +5,7 @@
     "font-awesome": "~4.4.0",
     "knockout": "~3.3.0",
     "knockout-es5": "~0.3.0",
+    "knockout-secure-binding": "~0.5.1",
     "piexifjs": "hMatoba/piexifjs",
     "roboto-fontface": "~0.4.3"
   },
