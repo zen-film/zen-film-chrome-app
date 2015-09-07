@@ -21,6 +21,7 @@
     "globals" : {
         "alert": false,
         "define": true,
-        "chrome": true
+        "chrome": true,
+        "L": true
     }
 }

@@ -22,6 +22,18 @@ define(
                 }, app.selectPhotosHandler);
 
             };
+
+            self._fileSelectHandle = function(ctx, event) {
+                var _files = event.target.files;
+                var files = [];
+
+                for (var i = 0; i < _files.length; i++) {
+                    files.push(_files[i]);
+                }
+
+                app.selectPhotosHandler(files);
+            };
+
             ko.track(self);
         }
 

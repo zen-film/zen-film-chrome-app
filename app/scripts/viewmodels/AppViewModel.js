@@ -14,11 +14,11 @@ define(
         EditorViewModel
     ) {
         function AppViewModel() {
-            var app = AppModel.instance();
             var self = this;
-            self.user = app.user;
+            self.app = AppModel.instance();
             self.gridViewModel = new GridViewModel();
             self.editorViewModel = new EditorViewModel();
+            self.isChromeApp = chrome.fileSystem ? true : false;
         }
 
         return AppViewModel;

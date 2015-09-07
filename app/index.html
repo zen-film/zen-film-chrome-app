@@ -6,12 +6,7 @@
 
         <link rel="stylesheet" href="bower_components/roboto-fontface/css/roboto-fontface.css" />
         <link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.css" />
-
-
-        <link rel="stylesheet" href="styles/main.css">
-        <link href='vendor/mapbox.css' rel='stylesheet' />
-        <link href='vendor/MarkerCluster.css' rel='stylesheet' />
-        <link href='vendor/MarkerCluster.Default.css' rel='stylesheet' />
+        <link rel="stylesheet" href="styles/main.css" />
     </head>
     <body>
         <span id="browser-sync-binding"></span>
@@ -28,22 +23,32 @@
                     "></input>
                 <div class="selection-highlight"></div>
                 <!-- /ko -->
+                <!-- ko if: isChrome -->
+                <input
+                    class="file-loader"
+                    style="display: none;"
+                    id="file-loader"
+                    data-sbind="event: { click: $root.gridViewModel.fileSelectHandle }"
+                    multiple>
+                <!-- /ko -->
+                <!-- ko notif: isChrome -->
                 <input
                     class="file-loader"
                     style="display: none;"
                     type="file"
                     id="file-loader"
-                    data-sbind="event: { click: $root.gridViewModel.fileSelectHandle }"
+                    data-sbind="event: { change: $root.gridViewModel._fileSelectHandle }"
                     multiple>
+                <!-- /ko -->
                 <div class="selection-highlight file-loader-highlight"></div>
             </div>
             <div class="selection-content">
-                <!-- ko foreach: $root.gridViewModel.photos -->
-                <label
-                    class="selection-item"
-                    data-bind="
-                        attr: {id: $data.file.name, style: 'background: url(' $data.img ')'
-                        "></label>
+                <!-- ko foreach: $root.app.photos -->
+                <label class="selection-item">
+                    <span class="selection-item-container"
+                        data-bind="attr: {id: $data.file.name, style: 'background: url(\'' $data.img '\)'"
+                    ></span>
+                </label>
                 <!-- /ko -->
                 <label for="file-loader" class="selection-item">
                     <span class="selection-item-container">
@@ -84,14 +89,17 @@
                     <div class="map__overlay" data-sbind="
                         visible: !$root.editorViewModel.mapIsActive,
                         click: $root.editorViewModel.toggleMapActiveState">
-                        <span class="map__overlay-icon"><i class="fa fa-hand-o-up"></i></span>
+                        <span class="map__overlay-icon">
+                            <i class="fa fa-hand-o-up"></i>
+                        </span>
                     </div>
-                    <div style="width: 100%; height: 100%" class="map" data-sbind="
-                        event: {
-                            mouseleave: $root.editorViewModel.mouseleaveMapHandler,
-                            mouseenter: $root.editorViewModel.mouseenterMapHandler
-                        }">
-                    </div>
+                    <iframe src="sandbox/map.html" width="300" height="300" id="map"
+                        data-sbind="
+                            event: {
+                                mouseleave: $root.editorViewModel.mouseleaveMapHandler,
+                                mouseenter: $root.editorViewModel.mouseenterMapHandler
+                            }"
+                    ></iframe>
                 </div>
             </div>
             <div class="action-bar">

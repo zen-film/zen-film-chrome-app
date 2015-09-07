@@ -107,7 +107,7 @@ gulp.task('fonts', function() {
 
 // Scan Your HTML For Assets & Optimize Them
 gulp.task('html', function() {
-    var assets = $.useref.assets({searchPath: ['.tmp', 'app', 'dist']});
+    // var assets = $.useref.assets({searchPath: ['.tmp', 'app', 'dist']});
 
     return gulp.src(['app/**/*.html'])
         // .pipe(assets)

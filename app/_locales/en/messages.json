@@ -6,5 +6,9 @@
     "appDescription": {
         "message": "My Chrome App",
         "description": "The description of the application"
+    },
+    "appVersion": {
+        "message": "0.2.15",
+        "description": "The version of the application"
     }
 }

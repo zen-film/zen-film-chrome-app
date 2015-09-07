@@ -1,7 +1,7 @@
 {
     "name": "__MSG_appName__",
     "description": "__MSG_appDescription__",
-    "version": "13",
+    "version": "__MSG_appVersion__",
     "manifest_version": 2,
     "default_locale": "en",
     "permissions": [
@@ -16,8 +16,8 @@
         "fullscreen",
         "geolocation",
         "https://*.mapbox.com/",
-        "https://*.vk.com/",
-        "<all_urls>"
+        "https://*.tiles.mapbox.com/",
+        "https://*.vk.com/"
     ],
     "icons": {
         "16": "images/icon-16.png",
@@ -31,5 +31,8 @@
             ]
         }
     },
-    "offline_enabled": true
+    "offline_enabled": true,
+    "sandbox": {
+        "pages": ["sandbox/map.html"]
+    }
 }

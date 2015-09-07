@@ -8,12 +8,13 @@ define(
 
             var fileEntryHandler = function(fileEntry) {
                 fileEntry.file(function(file) {
-                    self.file = file;
+                    self.fileEntry = fileEntry;
                     fileLoaderHandler(file);
                 });
             };
 
             var fileLoaderHandler = function(file) {
+                self.file = file;
                 var reader = new FileReader();
 
                 reader.onload = (function() {
@@ -24,12 +25,16 @@ define(
                     };
                 })(file);
 
-                // Read in the image file as a data URL.
                 reader.readAsDataURL(file);
             };
 
-            fileEntryHandler(fileEntry);
-            self.unsavedProp = ko.observable({});
+            if (chrome.fileSystem) {
+                fileEntryHandler(fileEntry);
+            } else {
+                fileLoaderHandler(fileEntry);
+            }
+
+            self.unsavedProp = ko.observable({'0th': {}, 'Exif': {}, 'GPS': {}});
 
             self.currentProp = ko.pureComputed(function() {
                 var currentProp = extend(
@@ -43,7 +48,7 @@ define(
             //     self.unsavedProp = prop;
             // };
 
-            ko.track(self)
+            ko.track(self);
         }
 
         return PhotoModel;

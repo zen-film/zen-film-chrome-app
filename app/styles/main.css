@@ -177,7 +177,7 @@ body {
     transition: opacity 0.3s;
 }
 
-.selection-checkbox:checked+.selection-highlight {
+.selection-checkbox:[checked="true"]+.selection-highlight {
     opacity: 1;
 }
 
