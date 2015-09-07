@@ -90,10 +90,15 @@
                         visible: !$root.editorViewModel.mapIsActive,
                         click: $root.editorViewModel.toggleMapActiveState">
                         <span class="map__overlay-icon">
+                            <!-- ko if: hasTouchScreen -->
                             <i class="fa fa-hand-o-up"></i>
+                            <!-- /ko -->
+                            <!-- ko if: !hasTouchScreen -->
+                            <i class="fa fa-map-marker"></i>
+                            <!-- /ko -->
                         </span>
                     </div>
-                    <iframe src="sandbox/map.html" width="300" height="300" id="map"
+                    <iframe class="map" src="sandbox/map.html" width="300" height="300" id="map"
                         data-sbind="
                             event: {
                                 mouseleave: $root.editorViewModel.mouseleaveMapHandler,

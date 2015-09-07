@@ -10,8 +10,12 @@ define(
         function MapViewModel() {
             var self = this;
 
-            L.mapbox.accessToken = 'pk.eyJ1Ijoic2xvZ2dlciIsImEiOiIwNjY2ZmUxMmRlNzJlNmNhMzE1YjFjOGY1MmQ2ZDY0ZSJ9.TDV9k1MtJSGG1srdycqkmA';
-
+            var token = [
+                'pk',
+                'eyJ1Ijoic2xvZ2dlciIsImEiOiIwNjY2ZmUxMmRlNzJlNmNhMzE1YjFjOGY1MmQ2ZDY0ZSJ9',
+                'TDV9k1MtJSGG1srdycqkmA'
+            ];
+            L.mapbox.accessToken = token.join('.');
             self.map = L.mapbox.map(document.querySelector('.map'), 'mapbox.dark', {
                 featureLayer: false,
                 legendControl: false,
@@ -19,13 +23,27 @@ define(
                 infoControl: false
             }).setView([56.83732996124871, 60.59886932373047], 10);
 
+            self.map.locate();
+
+            self.map.on('locationfound', function(e) {
+                self.map.fitBounds(e.bounds);
+            });
+
+            self.map.on('locationerror', function() {
+                console.log('locate err');
+            });
+
             var cluster = new L.MarkerClusterGroup();
 
             self.map.on('click', function(event) {
                 var coords = event.latlng;
+                cluster.clearLayers();
                 self.map.addMarker(coords, true);
 
-                self.appWindow.postMessage(coords, self.app.origin);
+                parent.postMessage({
+                    'type': 'changeGPS',
+                    'geo': coords
+                }, '*');
             });
 
             /**
@@ -49,28 +67,7 @@ define(
                 }
             };
 
-            self.messageHandler = function(event) {
-                if (event.data = "EHLO") {
-                    alert('Hello app!');
-                    self.appWindow = event.source;
-                    self.appOrigin = event.origin;
-                } else {
-                    if (self.appWindow) {
-                        alert(event.data);
-                    } else {
-                        alert('app not found');
-                    }
-                }
-            }
-
-            self.map.addLayer(cluster)
-            // var messagehandler = function(event) {
-            //     alert(event.origin);
-            //
-            //     event.source.postMessage(msg, event.origin)
-            // }
-            //
-            window.addEventListener("message", self.messageHandler, false);
+            self.map.addLayer(cluster);
 
             ko.track(self);
         }

@@ -19,7 +19,7 @@ define(
                     type: 'openWritableFile',
                     accepts: [{mimeTypes: ['image/jpg']}],
                     acceptsMultiple: true
-                }, app.selectPhotosHandler);
+                }, app.choosePhotosHandler);
 
             };
 
@@ -31,7 +31,7 @@ define(
                     files.push(_files[i]);
                 }
 
-                app.selectPhotosHandler(files);
+                app.choosePhotosHandler(files);
             };
 
             ko.track(self);

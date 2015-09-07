@@ -28,6 +28,7 @@ body {
     flex-direction: column;
 }
 
+.action-bar,
 .user-bar
 {
     display: flex;
@@ -65,6 +66,13 @@ body {
 .exif-editor
 {
     flex-grow: 1;
+    overflow-y: scroll;
+}
+
+.exif-editor span {
+    position: relative;
+    display: inline-block;
+    margin-top: 10px;
 }
 
 .map__wrapper
@@ -97,12 +105,7 @@ body {
 {
     font-size: 9em;
     pointer-events: none;
-    line-height: 300px
-}
-
-#map__dummy-input
-{
-    position: absolute;
+    line-height: 300px;
 }
 
 .map
@@ -110,12 +113,7 @@ body {
     cursor: pointer;
     width: 100%;
     height: 100%;
-}
-
-.action-bar
-{
-    height: 3em;
-    display: flex;
+    border: none;
 }
 
 .action__button
@@ -236,12 +234,6 @@ body {
 
 .selection-item[data-checked="true"] .fa {
     opacity: 0;
-}
-
-.exif-editor span {
-  position: relative;
-  display: inline-block;
-  margin-top: 10px;
 }
 
 .input--type-text {

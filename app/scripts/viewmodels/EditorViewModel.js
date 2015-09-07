@@ -16,21 +16,7 @@ define(
             self.mapIsActive = ko.observable(false);
             self.leaveFromMapInterval = false;
 
-            L.mapbox.accessToken = 'pk.eyJ1Ijoic2xvZ2dlciIsImEiOiIwNjY2ZmUxMmRlNzJlNmNhMzE1YjFjOGY1MmQ2ZDY0ZSJ9.TDV9k1MtJSGG1srdycqkmA';
-
-            self._map = L.mapbox.map(document.querySelector('.map'), 'mapbox.dark', {
-                featureLayer: false,
-                legendControl: false,
-                shareControl: false,
-                infoControl: false
-            }).setView([56.83732996124871, 60.59886932373047], 10);
-
-            var cluster = new L.MarkerClusterGroup();
-            self.c = cluster;
-            self._map.on('click', function(event) {
-                var coords = event.latlng;
-                self._map.addMarker(coords, true);
-
+            self.changeGPSHandler = function(coords) {
                 var gps = {};
                 var lat_ = coords.lat.toString().split('.');
                 var lng_ = coords.lng.toString().split('.');
@@ -40,31 +26,9 @@ define(
                 gps[piexifjs.GPSIFD.GPSLongitudeRef] = lng_ >= 0 ? 'E' : 'W';
                 gps[piexifjs.GPSIFD.GPSLatitude] = [parseInt(Math.abs(lat_[0]) + _lat), 1000000];
                 gps[piexifjs.GPSIFD.GPSLongitude] = [parseInt(Math.abs(lng_[0]) + _lng), 1000000];
+                console.log(gps);
                 self.updateMetaWithObject({'GPS': gps});
-            });
-
-            /**
-             * @param {Array} coords
-             * @param {Boolean} noFit - need reset map view
-             */
-            self._map.addMarker = function(coords, noFit) {
-                noFit = noFit || false;
-
-                cluster.addLayer(
-                    L.marker(coords, {
-                        icon: L.mapbox.marker.icon({
-                            'marker-symbol': 'camera',
-                            'marker-color': '#9B59B6'
-                        })}));
-
-                if (!noFit) {
-                    self._map.fitBounds(cluster.getBounds(), {
-                        padding: [10, 10]
-                    });
-                }
             };
-
-            self._map.addLayer(cluster);
 
             self.mouseleaveMapHandler = function() {
                 self.leaveFromMapInterval = setTimeout(
@@ -99,7 +63,7 @@ define(
             };
 
             ko.track(self);
-        }
+        };
 
         return EditorViewModel;
     }

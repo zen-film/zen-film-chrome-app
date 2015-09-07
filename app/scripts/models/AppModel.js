@@ -18,7 +18,7 @@ define(
             /**
              * @param {fileEntry[]} filesEntry
              */
-            self.selectPhotosHandler = function(filesEntry) {
+            self.choosePhotosHandler = function(filesEntry) {
                 filesEntry.forEach(function(fileEntry) {
                     self.photos.push(new PhotoModel(fileEntry));
                 });

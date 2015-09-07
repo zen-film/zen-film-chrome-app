@@ -83,6 +83,10 @@ gulp.task('copy', function() {
         'app/_locales/**/*',
     ]).pipe(gulp.dest('dist/_locales'));
 
+    var sandbox = gulp.src([
+        'app/sandbox/**/*',
+    ]).pipe(gulp.dest('dist/sandbox'));
+
     var vendor = gulp.src([
         'app/vendor/**/*',
     ])
@@ -94,7 +98,7 @@ gulp.task('copy', function() {
     ])
     .pipe(gulp.dest('dist/scripts'));
 
-    return merge(app, bower, vendor, scripts, locales)
+    return merge(app, bower, vendor, scripts, locales, sandbox)
         .pipe($.size({title: 'copy'}));
 });
 
