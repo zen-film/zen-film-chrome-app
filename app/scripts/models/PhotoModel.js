@@ -21,20 +21,23 @@ define(
              */
             var fileLoaderHandler = function(file) {
                 self.file = file;
+                self.imgSrc = ko.observable();
                 var reader = new FileReader();
 
                 reader.onload = (function() {
                     return function(e) {
                         self.img = e.target.result;
+                        self.imgSrc = 'url("' + self.img + '")';
+                        console.log(self.imgSrc);
                         self.exif = piexifjs.load(self.img);
                         for (var ifd in self.exif) {
-                            if (ifd == 'thumbnail') {
+                            if (ifd === 'thumbnail') {
                                 continue;
                             }
                             console.log('-' + ifd);
                             for (var tag in self.exif[ifd]) {
                                 var name = 'name';
-                                console.log('  ' + piexif.TAGS[ifd][tag][name] + ':' + self.exif[ifd][tag]);
+                                console.log('  ' + piexifjs.TAGS[ifd][tag][name] + ':' + self.exif[ifd][tag]);
                             }
                         }
                         console.log(self.exif);

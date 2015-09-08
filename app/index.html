@@ -46,7 +46,7 @@
                 <!-- ko foreach: $root.app.photos -->
                 <label class="selection-item" data-sbind="attr: {id: $data.file.name}">
                     <span class="selection-item-container"
-                        data-bind="css: {background: 'url(\'' $data.img '\')'}"
+                        data-bind="style: {background: $data.imgSrc}"
                     ></span>
                 </label>
                 <!-- /ko -->
