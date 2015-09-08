@@ -26,6 +26,7 @@ define(
                 gps[piexifjs.GPSIFD.GPSLongitudeRef] = lng_ >= 0 ? 'E' : 'W';
                 gps[piexifjs.GPSIFD.GPSLatitude] = [parseInt(Math.abs(lat_[0]) + _lat), 1000000];
                 gps[piexifjs.GPSIFD.GPSLongitude] = [parseInt(Math.abs(lng_[0]) + _lng), 1000000];
+                gps[piexifjs.GPSIFD.GPSVersionID] = [2, 2, 0, 0];
                 console.log(gps);
                 self.updateMetaWithObject({'GPS': gps});
             };
@@ -53,7 +54,21 @@ define(
                 var state = {};
 
                 return state;
-            });
+            }, self);
+
+            self.haveUnsavedMeta = function() {
+                for (var photoID in app.photos) {
+                    var unsaved = app.photos[photoID].unsavedProp;
+                    for (var recordType in unsaved) {
+                        if (Object.keys(unsaved[recordType] > 1)) {
+                            return true;
+                        }
+                    }
+                }
+                return false;
+            };
+
+            self.allProps = ko.observable({'0th': {}, 'Exif': {}, 'GPS': {}, '1st': {}});
 
             self.updateMetaWithObject = function(obj) {
                 var photos  = app.photos;
@@ -69,4 +84,4 @@ define(
     }
 );
 
-// {0th: Object, Exif: Object, GPS: Object, Interop: Object, 1st: Object}
+//

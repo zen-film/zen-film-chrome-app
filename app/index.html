@@ -12,13 +12,13 @@
         <span id="browser-sync-binding"></span>
         <section class="grid">
             <div class="selection-highlights">
-                <!-- ko foreach: $root.gridViewModel.photos -->
+                <!-- ko foreach: $root.app.photos -->
                 <input
                     type="checkbox"
                     class="selection-checkbox"
                     data-sbind="
                         checkedValue: $data,
-                        checked:  $root.gridViewModel.selectPhotos,
+                        checked:  $root.app.selectPhotos,
                         attr: {id: $data.file.name}
                     "></input>
                 <div class="selection-highlight"></div>
@@ -44,9 +44,9 @@
             </div>
             <div class="selection-content">
                 <!-- ko foreach: $root.app.photos -->
-                <label class="selection-item">
+                <label class="selection-item" data-sbind="attr: {id: $data.file.name}">
                     <span class="selection-item-container"
-                        data-bind="attr: {id: $data.file.name, style: 'background: url(\'' $data.img '\)'"
+                        data-bind="css: {background: 'url(\'' $data.img '\')'}"
                     ></span>
                 </label>
                 <!-- /ko -->
@@ -72,13 +72,15 @@
                     <i class="fa fa-user-secret"></i>
                 </span>
                 <span class="user__name">Anonymous</span>
-                <span class="user__action">
+                <span class="user__action action__button">
                     <i class="fa fa-sign-in"></i>
                 </span>
             </div>
             <div class="exif-editor">
                 <span>
-                    <input class="input--type-text" id="title" type="text" placeholder="Awesome title" />
+                    <input class="input--type-text" id="title" type="text" data-sbind="
+                        value: $root.editorViewModel.allProps['0th']['270']
+                    " placeholder="Awesome" />
                     <label for="title">Title</label>
                 </span>
                 <span>
@@ -108,13 +110,18 @@
                 </div>
             </div>
             <div class="action-bar">
-                <button class="action__button" title="Save">
+                <button
+                    class="action__button"
+                    title="Save"
+                    data-sbind="
+                        enable: $root.editorViewModel.haveUnsavedMeta(),
+                        click: $root.app.saveChange">
                       <i class="fa fa-download"></i>
                 </button>
-                <button class="action__button" title="Showcase">
+                <button class="action__button" title="Showcase" data-sbind="enable: $root.app.selectPhotos > 0">
                       <i class="fa fa-play"></i>
                 </button>
-                <button class="action__button" title="Share" disabled>
+                <button class="action__button" title="Share" data-sbind="enable: !$root.editorViewModel.haveUnsavedMeta() && $root.app.user.isAuth">
                     <i class="fa fa-share-alt"></i>
                 </button>
             </div>

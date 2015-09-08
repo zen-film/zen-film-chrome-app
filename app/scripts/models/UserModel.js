@@ -12,6 +12,7 @@ define(
 
             self.id = ko.observable();
             self.name = ko.observable();
+            self.isAuth = ko.observable(false);
 
             ko.track(self);
         }

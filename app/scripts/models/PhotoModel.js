@@ -6,6 +6,9 @@ define(
         function PhotoModel(fileEntry) {
             var self = this;
 
+            /**
+             * @param {fileEntry} fileEntry
+             */
             var fileEntryHandler = function(fileEntry) {
                 fileEntry.file(function(file) {
                     self.fileEntry = fileEntry;
@@ -13,6 +16,9 @@ define(
                 });
             };
 
+            /**
+             * @param {File} file
+             */
             var fileLoaderHandler = function(file) {
                 self.file = file;
                 var reader = new FileReader();
@@ -21,6 +27,16 @@ define(
                     return function(e) {
                         self.img = e.target.result;
                         self.exif = piexifjs.load(self.img);
+                        for (var ifd in self.exif) {
+                            if (ifd == 'thumbnail') {
+                                continue;
+                            }
+                            console.log('-' + ifd);
+                            for (var tag in self.exif[ifd]) {
+                                var name = 'name';
+                                console.log('  ' + piexif.TAGS[ifd][tag][name] + ':' + self.exif[ifd][tag]);
+                            }
+                        }
                         console.log(self.exif);
                     };
                 })(file);
@@ -28,6 +44,7 @@ define(
                 reader.readAsDataURL(file);
             };
 
+            // HACK: if we run app just in chrome, fileEntry is File
             if (chrome.fileSystem) {
                 fileEntryHandler(fileEntry);
             } else {
@@ -37,16 +54,12 @@ define(
             self.unsavedProp = ko.observable({'0th': {}, 'Exif': {}, 'GPS': {}});
 
             self.currentProp = ko.pureComputed(function() {
-                var currentProp = extend(
-                    self.exif, self.unsavedProp());
-                return currentProp;
+                return extend(self.exif, self.unsavedProp);
             }, this);
 
-            // self.updateProp = function(key, value) {
-            //     var prop = self.unsavedProp;
-            //     prop[key] = value;
-            //     self.unsavedProp = prop;
-            // };
+            self.updateMetaWithObject = function(obj) {
+                self.unsavedProp = extend(self.unsavedProp, obj);
+            };
 
             ko.track(self);
         }

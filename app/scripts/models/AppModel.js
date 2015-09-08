@@ -24,6 +24,10 @@ define(
                 });
             };
 
+            self.saveChange = function(event) {
+                console.log('need save');
+            };
+
             ko.track(self);
         }
 
