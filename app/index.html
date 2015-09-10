@@ -6,6 +6,8 @@
 
         <link rel="stylesheet" href="bower_components/roboto-fontface/css/roboto-fontface.css" />
         <link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.css" />
+        <link rel="stylesheet" href="bower_components/photoswipe/dist/photoswipe.css" />
+        <link rel="stylesheet" href="bower_components/photoswipe/dist/default-skin/default-skin.css" />
         <link rel="stylesheet" href="styles/main.css" />
     </head>
     <body>
@@ -17,39 +19,43 @@
                     type="checkbox"
                     class="selection-checkbox"
                     data-sbind="
-                        checkedValue: $data,
-                        checked:  $root.app.selectPhotos,
                         attr: {id: $data.file.name}
                     "></input>
                 <div class="selection-highlight"></div>
                 <!-- /ko -->
-                <!-- ko if: isChrome -->
+
+                <!-- ko if: $root.isChromeApp -->
                 <input
                     class="file-loader"
                     style="display: none;"
                     id="file-loader"
-                    data-sbind="event: { click: $root.gridViewModel.fileSelectHandle }"
-                    multiple>
+                    data-sbind="event: { click: $root.gridViewModel.fileChooseHandle }">
                 <!-- /ko -->
-                <!-- ko notif: isChrome -->
+
+                <!-- ko ifnot: $root.isChromeApp -->
                 <input
                     class="file-loader"
                     style="display: none;"
                     type="file"
                     id="file-loader"
-                    data-sbind="event: { change: $root.gridViewModel._fileSelectHandle }"
+                    data-sbind="event: { change: $root.gridViewModel._fileChooseHandle }"
                     multiple>
                 <!-- /ko -->
+
                 <div class="selection-highlight file-loader-highlight"></div>
             </div>
             <div class="selection-content">
+
                 <!-- ko foreach: $root.app.photos -->
-                <label class="selection-item" data-sbind="attr: {id: $data.file.name}">
+                <label class="selection-item" data-sbind="
+                    attr: {id: $data.file.name},
+                    event: {click: $root.gridViewModel.selectPhoto}">
                     <span class="selection-item-container"
-                        data-bind="style: {background: $data.imgSrc}"
+                        data-sbind="style: {backgroundImage: $data.imgSrc}"
                     ></span>
                 </label>
                 <!-- /ko -->
+
                 <label for="file-loader" class="selection-item">
                     <span class="selection-item-container">
                         <i class="fa fa-fw fa-plus"></i>
@@ -118,7 +124,12 @@
                         click: $root.app.saveChange">
                       <i class="fa fa-download"></i>
                 </button>
-                <button class="action__button" title="Showcase" data-sbind="enable: $root.app.selectPhotos > 0">
+                <button
+                    class="action__button"
+                    title="Open gallery"
+                    data-sbind="
+                        click: $root.galleryViewModel.openGallery,
+                        enable: $root.app.selectPhotos.length > 0">
                       <i class="fa fa-play"></i>
                 </button>
                 <button class="action__button" title="Share" data-sbind="enable: !$root.editorViewModel.haveUnsavedMeta() && $root.app.user.isAuth">
@@ -126,7 +137,71 @@
                 </button>
             </div>
         </section>
+        <!-- Root element of PhotoSwipe. Must have class pswp. -->
+        <div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
 
+            <!-- Background of PhotoSwipe.
+                 It's a separate element, as animating opacity is faster than rgba(). -->
+            <div class="pswp__bg"></div>
+
+            <!-- Slides wrapper with overflow:hidden. -->
+            <div class="pswp__scroll-wrap">
+
+                <!-- Container that holds slides. PhotoSwipe keeps only 3 slides in DOM to save memory. -->
+                <div class="pswp__container">
+                    <!-- don't modify these 3 pswp__item elements, data is added later on -->
+                    <div class="pswp__item"></div>
+                    <div class="pswp__item"></div>
+                    <div class="pswp__item"></div>
+                </div>
+
+                <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+                <div class="pswp__ui pswp__ui--hidden">
+
+                    <div class="pswp__top-bar">
+
+                        <!--  Controls are self-explanatory. Order can be changed. -->
+
+                        <div class="pswp__counter"></div>
+
+                        <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                        <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                        <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                        <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                        <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                        <!-- element will get class pswp__preloader--active when preloader is running -->
+                        <div class="pswp__preloader">
+                            <div class="pswp__preloader__icn">
+                              <div class="pswp__preloader__cut">
+                                <div class="pswp__preloader__donut"></div>
+                              </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                        <div class="pswp__share-tooltip"></div>
+                    </div>
+
+                    <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+                    </button>
+
+                    <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+                    </button>
+
+                    <div class="pswp__caption">
+                        <div class="pswp__caption__center"></div>
+                    </div>
+
+                  </div>
+
+                </div>
+
+        </div>
         <script src="vendor/require.js" charset="utf-8"></script>
         <script src='vendor/mapbox.js'></script>
         <script src='vendor/leaflet.markercluster.js'></script>

@@ -2,22 +2,27 @@
 
 define(
     [
+        'knockout', 'ko-es5',
         'models/AppModel',
         'models/UserModel',
         'viewmodels/GridViewModel',
-        'viewmodels/EditorViewModel'
+        'viewmodels/EditorViewModel',
+        'viewmodels/GalleryViewModel'
     ],
     function(
+        ko, koes5,
         AppModel,
         UserModel,
         GridViewModel,
-        EditorViewModel
+        EditorViewModel,
+        GalleryViewModel
     ) {
         function AppViewModel() {
             var self = this;
             self.app = AppModel.instance();
             self.gridViewModel = new GridViewModel();
             self.editorViewModel = new EditorViewModel();
+            self.galleryViewModel = new GalleryViewModel();
 
             self.messageHandler = function(event) {
                 if (event.data.type === 'changeGPS') {
@@ -29,6 +34,7 @@ define(
             window.addEventListener('message', self.messageHandler);
             self.isChromeApp = chrome.fileSystem ? true : false;
             self.hasTouchScreen = 'ontouchstart' in window;
+            ko.track(self);
         }
 
         return AppViewModel;
