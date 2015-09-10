@@ -16,11 +16,14 @@ define(
             self.user = UserModel.instance();
 
             /**
-             * @param {fileEntry[]} filesEntry
+             * @param {fileEntry[] | File[]} filesEntry
              */
             self.choosePhotosHandler = function(filesEntry) {
                 filesEntry.forEach(function(fileEntry) {
-                    self.photos.push(new PhotoModel(fileEntry));
+
+                    var photo = new PhotoModel(fileEntry);
+                    self.photos.push(photo);
+
                 });
             };
 

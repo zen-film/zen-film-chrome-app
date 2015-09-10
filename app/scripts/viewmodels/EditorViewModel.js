@@ -59,8 +59,11 @@ define(
             self.haveUnsavedMeta = function() {
                 for (var photoID in app.photos) {
                     var unsaved = app.photos[photoID].unsavedProp;
+                    console.log(unsaved);
                     for (var recordType in unsaved) {
                         if (Object.keys(unsaved[recordType] > 1)) {
+                            console.log(recordType);
+                            console.log(unsaved[recordType]);
                             return true;
                         }
                     }

@@ -27,24 +27,27 @@ define(
                 reader.onload = (function() {
                     return function(e) {
                         self.img = e.target.result;
-                        self.imgSrc = 'url("' + self.img + '")';
+                        self.imgSrc = 'url(\'' + self.img + '\')';
                         console.log(self.imgSrc);
-                        self.exif = piexifjs.load(self.img);
-                        for (var ifd in self.exif) {
-                            if (ifd === 'thumbnail') {
-                                continue;
+                        try {
+                            self.exif = piexifjs.load(self.img);
+                            for (var ifd in self.exif) {
+                                if (ifd === 'thumbnail') {
+                                    continue;
+                                }
+                                console.log('-' + ifd);
+                                for (var tag in self.exif[ifd]) {
+                                    var name = 'name';
+                                    console.log('  ' + piexifjs.TAGS[ifd][tag][name] + ':' + self.exif[ifd][tag]);
+                                }
                             }
-                            console.log('-' + ifd);
-                            for (var tag in self.exif[ifd]) {
-                                var name = 'name';
-                                console.log('  ' + piexifjs.TAGS[ifd][tag][name] + ':' + self.exif[ifd][tag]);
-                            }
+                        } catch (e) {
+                            throw 'Unsupport file';
                         }
-                        console.log(self.exif);
                     };
-                })(file);
+                })(self.file);
 
-                reader.readAsDataURL(file);
+                reader.readAsDataURL(self.file);
             };
 
             // HACK: if we run app just in chrome, fileEntry is File
@@ -54,7 +57,7 @@ define(
                 fileLoaderHandler(fileEntry);
             }
 
-            self.unsavedProp = ko.observable({'0th': {}, 'Exif': {}, 'GPS': {}});
+            self.unsavedProp = ko.observable();
 
             self.currentProp = ko.pureComputed(function() {
                 return extend(self.exif, self.unsavedProp);

@@ -6,6 +6,7 @@
     "knockout": "~3.3.0",
     "knockout-es5": "~0.3.0",
     "knockout-secure-binding": "~0.5.1",
+    "photoswipe": "~4.1.0",
     "piexifjs": "hMatoba/piexifjs",
     "roboto-fontface": "~0.4.3"
   },
