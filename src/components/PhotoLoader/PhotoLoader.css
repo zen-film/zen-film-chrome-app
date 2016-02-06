@@ -1,0 +1,13 @@
+.photo--loader {
+  display: flex;
+  margin: calc(16px + 8px);
+  cursor: pointer;
+}
+
+.photo--loader:hover {
+  color: #D8D9DA;
+}
+
+.photo--loader > svg {
+  margin: auto;
+}

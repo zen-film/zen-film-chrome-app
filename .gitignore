@@ -1,8 +1,4 @@
 node_modules
-temp
-.tmp
+npm-debug.log
+.DS_Store
 dist
-.sass-cache
-app/bower_components
-test/bower_components
-package

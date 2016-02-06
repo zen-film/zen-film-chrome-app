@@ -1,0 +1,33 @@
+.photo
+{
+  width: 150px;
+  height: 150px;
+  line-height: 150px;
+  display: inline-block;
+  font-size: 2em;
+  border-radius: 4px;
+  color: #6b6d6f;
+  background: #383636;
+  background-size: cover;
+  background-position: center;
+}
+
+.photo__wrap
+{
+  padding: 16px;
+  height: 150px;
+  border-radius: 16px;
+  margin: 8px;
+  cursor: pointer;
+}
+
+.photo__wrap:hover,
+.photo__wrap--selected
+{
+  background: #736D6D;
+}
+
+.photo__wrap--selected:hover
+{
+  background: none;
+}

@@ -1,0 +1,46 @@
+.user
+{
+    display: flex;
+    height: 3em;
+    max-height: 3em;
+    min-height: 3em;
+    line-height: 3em;
+    background: #8e44ad;
+}
+
+.user__wrap
+{
+  display: flex;
+  flex-grow: 1;
+}
+
+.user__name
+{
+    flex-grow: 1;
+    padding-left: 5px;
+    cursor: default;
+    max-width: calc(300px - 5px - 6em)
+}
+
+.user__action,
+.user__photo
+{
+    width: 3em;
+    max-width: 3em;
+    display: flex;
+}
+
+.user__action > svg,
+.user__photo > svg
+{
+  margin: auto;
+}
+
+.user__wrap:hover,
+.user__name:hover,
+.user__action:hover
+{
+  background-color: #9b59b6;
+  color: #FFFFFF;
+  cursor: pointer;
+}
