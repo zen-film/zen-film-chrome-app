@@ -39,10 +39,10 @@ export default class UserBar extends Component {
   {
     let isLogin = this.props.user.isLogin
     console.log(this);
-    this.props.dispatch(showSettings)
+    let dispatch =  this.props.dispatch
     return (
       <span className="user">
-        <span className="user__wrap" onClick={this.props.dispatch(toggleSettings)}>
+        <span className="user__wrap" onClick={()=>{dispatch(toggleSettings)}}>
           <UserPhoto />
           <UserName name={isLogin ? 'user__name' : 'Anonymous'} />
         </span>
